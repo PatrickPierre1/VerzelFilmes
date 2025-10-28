@@ -5,11 +5,19 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model FavoriteMovie {
+  id          Int      @id @default(autoincrement())
+  tmdbId      Int      @unique @map("tmdb_id")
+  titulo      String   @db.VarChar(255)
+  createdAt   DateTime @default(now())
+
+  @@map("favorite_movies")
 }
