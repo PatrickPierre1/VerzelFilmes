@@ -1,6 +1,10 @@
+import Header from "../components/Header";
+
 const Index = () => {
     return (
-        <h1>Index</h1>
+        <div className="min-h-screen">
+            <Header />
+        </div>
     )
 };
 export default Index;
