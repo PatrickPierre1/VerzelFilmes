@@ -124,7 +124,8 @@ exports.Prisma.FavoriteMovieScalarFieldEnum = {
   id: 'id',
   tmdbId: 'tmdbId',
   titulo: 'titulo',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  userId: 'userId'
 };
 
 exports.Prisma.UserScalarFieldEnum = {

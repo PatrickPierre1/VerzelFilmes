@@ -16,19 +16,23 @@ datasource db {
 
 model FavoriteMovie {
   id          Int      @id @default(autoincrement())
-  tmdbId      Int      @unique @map("tmdb_id")
+  tmdbId      Int      @map("tmdb_id")
   titulo      String   @db.VarChar(255)
   createdAt   DateTime @default(now())
+  userId      Int      @map("user_id")
+  user        User     @relation(fields: [userId], references: [id])
 
+  @@unique([userId, tmdbId])
   @@map("favorite_movies")
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now()) @map("created_at")
+  id             Int             @id @default(autoincrement())
+  name           String
+  email          String          @unique
+  password       String
+  createdAt      DateTime        @default(now()) @map("created_at")
+  favoriteMovies FavoriteMovie[]
 
   @@map("users")
 }

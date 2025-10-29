@@ -931,6 +931,36 @@ export namespace Prisma {
    */
 
 
+  /**
+   * Count Type UserCountOutputType
+   */
+
+  export type UserCountOutputType = {
+    favoriteMovies: number
+  }
+
+  export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    favoriteMovies?: boolean | UserCountOutputTypeCountFavoriteMoviesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCountOutputType
+     */
+    select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountFavoriteMoviesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FavoriteMovieWhereInput
+  }
+
 
   /**
    * Models
@@ -951,11 +981,13 @@ export namespace Prisma {
   export type FavoriteMovieAvgAggregateOutputType = {
     id: number | null
     tmdbId: number | null
+    userId: number | null
   }
 
   export type FavoriteMovieSumAggregateOutputType = {
     id: number | null
     tmdbId: number | null
+    userId: number | null
   }
 
   export type FavoriteMovieMinAggregateOutputType = {
@@ -963,6 +995,7 @@ export namespace Prisma {
     tmdbId: number | null
     titulo: string | null
     createdAt: Date | null
+    userId: number | null
   }
 
   export type FavoriteMovieMaxAggregateOutputType = {
@@ -970,6 +1003,7 @@ export namespace Prisma {
     tmdbId: number | null
     titulo: string | null
     createdAt: Date | null
+    userId: number | null
   }
 
   export type FavoriteMovieCountAggregateOutputType = {
@@ -977,6 +1011,7 @@ export namespace Prisma {
     tmdbId: number
     titulo: number
     createdAt: number
+    userId: number
     _all: number
   }
 
@@ -984,11 +1019,13 @@ export namespace Prisma {
   export type FavoriteMovieAvgAggregateInputType = {
     id?: true
     tmdbId?: true
+    userId?: true
   }
 
   export type FavoriteMovieSumAggregateInputType = {
     id?: true
     tmdbId?: true
+    userId?: true
   }
 
   export type FavoriteMovieMinAggregateInputType = {
@@ -996,6 +1033,7 @@ export namespace Prisma {
     tmdbId?: true
     titulo?: true
     createdAt?: true
+    userId?: true
   }
 
   export type FavoriteMovieMaxAggregateInputType = {
@@ -1003,6 +1041,7 @@ export namespace Prisma {
     tmdbId?: true
     titulo?: true
     createdAt?: true
+    userId?: true
   }
 
   export type FavoriteMovieCountAggregateInputType = {
@@ -1010,6 +1049,7 @@ export namespace Prisma {
     tmdbId?: true
     titulo?: true
     createdAt?: true
+    userId?: true
     _all?: true
   }
 
@@ -1104,6 +1144,7 @@ export namespace Prisma {
     tmdbId: number
     titulo: string
     createdAt: Date
+    userId: number
     _count: FavoriteMovieCountAggregateOutputType | null
     _avg: FavoriteMovieAvgAggregateOutputType | null
     _sum: FavoriteMovieSumAggregateOutputType | null
@@ -1130,6 +1171,8 @@ export namespace Prisma {
     tmdbId?: boolean
     titulo?: boolean
     createdAt?: boolean
+    userId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["favoriteMovie"]>
 
 
@@ -1139,18 +1182,25 @@ export namespace Prisma {
     tmdbId?: boolean
     titulo?: boolean
     createdAt?: boolean
+    userId?: boolean
   }
 
-  export type FavoriteMovieOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tmdbId" | "titulo" | "createdAt", ExtArgs["result"]["favoriteMovie"]>
+  export type FavoriteMovieOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tmdbId" | "titulo" | "createdAt" | "userId", ExtArgs["result"]["favoriteMovie"]>
+  export type FavoriteMovieInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
 
   export type $FavoriteMoviePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "FavoriteMovie"
-    objects: {}
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       tmdbId: number
       titulo: string
       createdAt: Date
+      userId: number
     }, ExtArgs["result"]["favoriteMovie"]>
     composites: {}
   }
@@ -1491,6 +1541,7 @@ export namespace Prisma {
    */
   export interface Prisma__FavoriteMovieClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1524,6 +1575,7 @@ export namespace Prisma {
     readonly tmdbId: FieldRef<"FavoriteMovie", 'Int'>
     readonly titulo: FieldRef<"FavoriteMovie", 'String'>
     readonly createdAt: FieldRef<"FavoriteMovie", 'DateTime'>
+    readonly userId: FieldRef<"FavoriteMovie", 'Int'>
   }
     
 
@@ -1540,6 +1592,10 @@ export namespace Prisma {
      * Omit specific fields from the FavoriteMovie
      */
     omit?: FavoriteMovieOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FavoriteMovieInclude<ExtArgs> | null
     /**
      * Filter, which FavoriteMovie to fetch.
      */
@@ -1559,6 +1615,10 @@ export namespace Prisma {
      */
     omit?: FavoriteMovieOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FavoriteMovieInclude<ExtArgs> | null
+    /**
      * Filter, which FavoriteMovie to fetch.
      */
     where: FavoriteMovieWhereUniqueInput
@@ -1576,6 +1636,10 @@ export namespace Prisma {
      * Omit specific fields from the FavoriteMovie
      */
     omit?: FavoriteMovieOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FavoriteMovieInclude<ExtArgs> | null
     /**
      * Filter, which FavoriteMovie to fetch.
      */
@@ -1625,6 +1689,10 @@ export namespace Prisma {
      */
     omit?: FavoriteMovieOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FavoriteMovieInclude<ExtArgs> | null
+    /**
      * Filter, which FavoriteMovie to fetch.
      */
     where?: FavoriteMovieWhereInput
@@ -1673,6 +1741,10 @@ export namespace Prisma {
      */
     omit?: FavoriteMovieOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FavoriteMovieInclude<ExtArgs> | null
+    /**
      * Filter, which FavoriteMovies to fetch.
      */
     where?: FavoriteMovieWhereInput
@@ -1716,6 +1788,10 @@ export namespace Prisma {
      */
     omit?: FavoriteMovieOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FavoriteMovieInclude<ExtArgs> | null
+    /**
      * The data needed to create a FavoriteMovie.
      */
     data: XOR<FavoriteMovieCreateInput, FavoriteMovieUncheckedCreateInput>
@@ -1744,6 +1820,10 @@ export namespace Prisma {
      * Omit specific fields from the FavoriteMovie
      */
     omit?: FavoriteMovieOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FavoriteMovieInclude<ExtArgs> | null
     /**
      * The data needed to update a FavoriteMovie.
      */
@@ -1785,6 +1865,10 @@ export namespace Prisma {
      */
     omit?: FavoriteMovieOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FavoriteMovieInclude<ExtArgs> | null
+    /**
      * The filter to search for the FavoriteMovie to update in case it exists.
      */
     where: FavoriteMovieWhereUniqueInput
@@ -1810,6 +1894,10 @@ export namespace Prisma {
      * Omit specific fields from the FavoriteMovie
      */
     omit?: FavoriteMovieOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FavoriteMovieInclude<ExtArgs> | null
     /**
      * Filter which FavoriteMovie to delete.
      */
@@ -1842,6 +1930,10 @@ export namespace Prisma {
      * Omit specific fields from the FavoriteMovie
      */
     omit?: FavoriteMovieOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FavoriteMovieInclude<ExtArgs> | null
   }
 
 
@@ -2043,6 +2135,8 @@ export namespace Prisma {
     email?: boolean
     password?: boolean
     createdAt?: boolean
+    favoriteMovies?: boolean | User$favoriteMoviesArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
 
@@ -2056,10 +2150,16 @@ export namespace Prisma {
   }
 
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "createdAt", ExtArgs["result"]["user"]>
+  export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    favoriteMovies?: boolean | User$favoriteMoviesArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
+  }
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
-    objects: {}
+    objects: {
+      favoriteMovies: Prisma.$FavoriteMoviePayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       name: string
@@ -2406,6 +2506,7 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    favoriteMovies<T extends User$favoriteMoviesArgs<ExtArgs> = {}>(args?: Subset<T, User$favoriteMoviesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FavoriteMoviePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2457,6 +2558,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -2475,6 +2580,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -2492,6 +2601,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * Filter, which User to fetch.
      */
@@ -2541,6 +2654,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where?: UserWhereInput
@@ -2589,6 +2706,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which Users to fetch.
      */
     where?: UserWhereInput
@@ -2632,6 +2753,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * The data needed to create a User.
      */
     data: XOR<UserCreateInput, UserUncheckedCreateInput>
@@ -2660,6 +2785,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The data needed to update a User.
      */
@@ -2701,6 +2830,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * The filter to search for the User to update in case it exists.
      */
     where: UserWhereUniqueInput
@@ -2727,6 +2860,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter which User to delete.
      */
     where: UserWhereUniqueInput
@@ -2747,6 +2884,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.favoriteMovies
+   */
+  export type User$favoriteMoviesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FavoriteMovie
+     */
+    select?: FavoriteMovieSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FavoriteMovie
+     */
+    omit?: FavoriteMovieOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FavoriteMovieInclude<ExtArgs> | null
+    where?: FavoriteMovieWhereInput
+    orderBy?: FavoriteMovieOrderByWithRelationInput | FavoriteMovieOrderByWithRelationInput[]
+    cursor?: FavoriteMovieWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FavoriteMovieScalarFieldEnum | FavoriteMovieScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2758,6 +2919,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
   }
 
 
@@ -2779,7 +2944,8 @@ export namespace Prisma {
     id: 'id',
     tmdbId: 'tmdbId',
     titulo: 'titulo',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    userId: 'userId'
   };
 
   export type FavoriteMovieScalarFieldEnum = (typeof FavoriteMovieScalarFieldEnum)[keyof typeof FavoriteMovieScalarFieldEnum]
@@ -2864,6 +3030,8 @@ export namespace Prisma {
     tmdbId?: IntFilter<"FavoriteMovie"> | number
     titulo?: StringFilter<"FavoriteMovie"> | string
     createdAt?: DateTimeFilter<"FavoriteMovie"> | Date | string
+    userId?: IntFilter<"FavoriteMovie"> | number
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type FavoriteMovieOrderByWithRelationInput = {
@@ -2871,24 +3039,30 @@ export namespace Prisma {
     tmdbId?: SortOrder
     titulo?: SortOrder
     createdAt?: SortOrder
+    userId?: SortOrder
+    user?: UserOrderByWithRelationInput
     _relevance?: FavoriteMovieOrderByRelevanceInput
   }
 
   export type FavoriteMovieWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    tmdbId?: number
+    userId_tmdbId?: FavoriteMovieUserIdTmdbIdCompoundUniqueInput
     AND?: FavoriteMovieWhereInput | FavoriteMovieWhereInput[]
     OR?: FavoriteMovieWhereInput[]
     NOT?: FavoriteMovieWhereInput | FavoriteMovieWhereInput[]
+    tmdbId?: IntFilter<"FavoriteMovie"> | number
     titulo?: StringFilter<"FavoriteMovie"> | string
     createdAt?: DateTimeFilter<"FavoriteMovie"> | Date | string
-  }, "id" | "tmdbId">
+    userId?: IntFilter<"FavoriteMovie"> | number
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "userId_tmdbId">
 
   export type FavoriteMovieOrderByWithAggregationInput = {
     id?: SortOrder
     tmdbId?: SortOrder
     titulo?: SortOrder
     createdAt?: SortOrder
+    userId?: SortOrder
     _count?: FavoriteMovieCountOrderByAggregateInput
     _avg?: FavoriteMovieAvgOrderByAggregateInput
     _max?: FavoriteMovieMaxOrderByAggregateInput
@@ -2904,6 +3078,7 @@ export namespace Prisma {
     tmdbId?: IntWithAggregatesFilter<"FavoriteMovie"> | number
     titulo?: StringWithAggregatesFilter<"FavoriteMovie"> | string
     createdAt?: DateTimeWithAggregatesFilter<"FavoriteMovie"> | Date | string
+    userId?: IntWithAggregatesFilter<"FavoriteMovie"> | number
   }
 
   export type UserWhereInput = {
@@ -2915,6 +3090,7 @@ export namespace Prisma {
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
+    favoriteMovies?: FavoriteMovieListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -2923,6 +3099,7 @@ export namespace Prisma {
     email?: SortOrder
     password?: SortOrder
     createdAt?: SortOrder
+    favoriteMovies?: FavoriteMovieOrderByRelationAggregateInput
     _relevance?: UserOrderByRelevanceInput
   }
 
@@ -2935,6 +3112,7 @@ export namespace Prisma {
     name?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
+    favoriteMovies?: FavoriteMovieListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -2965,6 +3143,7 @@ export namespace Prisma {
     tmdbId: number
     titulo: string
     createdAt?: Date | string
+    user: UserCreateNestedOneWithoutFavoriteMoviesInput
   }
 
   export type FavoriteMovieUncheckedCreateInput = {
@@ -2972,12 +3151,14 @@ export namespace Prisma {
     tmdbId: number
     titulo: string
     createdAt?: Date | string
+    userId: number
   }
 
   export type FavoriteMovieUpdateInput = {
     tmdbId?: IntFieldUpdateOperationsInput | number
     titulo?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutFavoriteMoviesNestedInput
   }
 
   export type FavoriteMovieUncheckedUpdateInput = {
@@ -2985,6 +3166,7 @@ export namespace Prisma {
     tmdbId?: IntFieldUpdateOperationsInput | number
     titulo?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: IntFieldUpdateOperationsInput | number
   }
 
   export type FavoriteMovieCreateManyInput = {
@@ -2992,6 +3174,7 @@ export namespace Prisma {
     tmdbId: number
     titulo: string
     createdAt?: Date | string
+    userId: number
   }
 
   export type FavoriteMovieUpdateManyMutationInput = {
@@ -3005,6 +3188,7 @@ export namespace Prisma {
     tmdbId?: IntFieldUpdateOperationsInput | number
     titulo?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: IntFieldUpdateOperationsInput | number
   }
 
   export type UserCreateInput = {
@@ -3012,6 +3196,7 @@ export namespace Prisma {
     email: string
     password: string
     createdAt?: Date | string
+    favoriteMovies?: FavoriteMovieCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -3020,6 +3205,7 @@ export namespace Prisma {
     email: string
     password: string
     createdAt?: Date | string
+    favoriteMovies?: FavoriteMovieUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -3027,6 +3213,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    favoriteMovies?: FavoriteMovieUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -3035,6 +3222,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    favoriteMovies?: FavoriteMovieUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -3097,10 +3285,20 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
   export type FavoriteMovieOrderByRelevanceInput = {
     fields: FavoriteMovieOrderByRelevanceFieldEnum | FavoriteMovieOrderByRelevanceFieldEnum[]
     sort: SortOrder
     search: string
+  }
+
+  export type FavoriteMovieUserIdTmdbIdCompoundUniqueInput = {
+    userId: number
+    tmdbId: number
   }
 
   export type FavoriteMovieCountOrderByAggregateInput = {
@@ -3108,11 +3306,13 @@ export namespace Prisma {
     tmdbId?: SortOrder
     titulo?: SortOrder
     createdAt?: SortOrder
+    userId?: SortOrder
   }
 
   export type FavoriteMovieAvgOrderByAggregateInput = {
     id?: SortOrder
     tmdbId?: SortOrder
+    userId?: SortOrder
   }
 
   export type FavoriteMovieMaxOrderByAggregateInput = {
@@ -3120,6 +3320,7 @@ export namespace Prisma {
     tmdbId?: SortOrder
     titulo?: SortOrder
     createdAt?: SortOrder
+    userId?: SortOrder
   }
 
   export type FavoriteMovieMinOrderByAggregateInput = {
@@ -3127,11 +3328,13 @@ export namespace Prisma {
     tmdbId?: SortOrder
     titulo?: SortOrder
     createdAt?: SortOrder
+    userId?: SortOrder
   }
 
   export type FavoriteMovieSumOrderByAggregateInput = {
     id?: SortOrder
     tmdbId?: SortOrder
+    userId?: SortOrder
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -3182,6 +3385,16 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type FavoriteMovieListRelationFilter = {
+    every?: FavoriteMovieWhereInput
+    some?: FavoriteMovieWhereInput
+    none?: FavoriteMovieWhereInput
+  }
+
+  export type FavoriteMovieOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserOrderByRelevanceInput = {
     fields: UserOrderByRelevanceFieldEnum | UserOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -3220,6 +3433,12 @@ export namespace Prisma {
     id?: SortOrder
   }
 
+  export type UserCreateNestedOneWithoutFavoriteMoviesInput = {
+    create?: XOR<UserCreateWithoutFavoriteMoviesInput, UserUncheckedCreateWithoutFavoriteMoviesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFavoriteMoviesInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -3234,6 +3453,56 @@ export namespace Prisma {
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type UserUpdateOneRequiredWithoutFavoriteMoviesNestedInput = {
+    create?: XOR<UserCreateWithoutFavoriteMoviesInput, UserUncheckedCreateWithoutFavoriteMoviesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFavoriteMoviesInput
+    upsert?: UserUpsertWithoutFavoriteMoviesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFavoriteMoviesInput, UserUpdateWithoutFavoriteMoviesInput>, UserUncheckedUpdateWithoutFavoriteMoviesInput>
+  }
+
+  export type FavoriteMovieCreateNestedManyWithoutUserInput = {
+    create?: XOR<FavoriteMovieCreateWithoutUserInput, FavoriteMovieUncheckedCreateWithoutUserInput> | FavoriteMovieCreateWithoutUserInput[] | FavoriteMovieUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: FavoriteMovieCreateOrConnectWithoutUserInput | FavoriteMovieCreateOrConnectWithoutUserInput[]
+    createMany?: FavoriteMovieCreateManyUserInputEnvelope
+    connect?: FavoriteMovieWhereUniqueInput | FavoriteMovieWhereUniqueInput[]
+  }
+
+  export type FavoriteMovieUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<FavoriteMovieCreateWithoutUserInput, FavoriteMovieUncheckedCreateWithoutUserInput> | FavoriteMovieCreateWithoutUserInput[] | FavoriteMovieUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: FavoriteMovieCreateOrConnectWithoutUserInput | FavoriteMovieCreateOrConnectWithoutUserInput[]
+    createMany?: FavoriteMovieCreateManyUserInputEnvelope
+    connect?: FavoriteMovieWhereUniqueInput | FavoriteMovieWhereUniqueInput[]
+  }
+
+  export type FavoriteMovieUpdateManyWithoutUserNestedInput = {
+    create?: XOR<FavoriteMovieCreateWithoutUserInput, FavoriteMovieUncheckedCreateWithoutUserInput> | FavoriteMovieCreateWithoutUserInput[] | FavoriteMovieUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: FavoriteMovieCreateOrConnectWithoutUserInput | FavoriteMovieCreateOrConnectWithoutUserInput[]
+    upsert?: FavoriteMovieUpsertWithWhereUniqueWithoutUserInput | FavoriteMovieUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: FavoriteMovieCreateManyUserInputEnvelope
+    set?: FavoriteMovieWhereUniqueInput | FavoriteMovieWhereUniqueInput[]
+    disconnect?: FavoriteMovieWhereUniqueInput | FavoriteMovieWhereUniqueInput[]
+    delete?: FavoriteMovieWhereUniqueInput | FavoriteMovieWhereUniqueInput[]
+    connect?: FavoriteMovieWhereUniqueInput | FavoriteMovieWhereUniqueInput[]
+    update?: FavoriteMovieUpdateWithWhereUniqueWithoutUserInput | FavoriteMovieUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: FavoriteMovieUpdateManyWithWhereWithoutUserInput | FavoriteMovieUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: FavoriteMovieScalarWhereInput | FavoriteMovieScalarWhereInput[]
+  }
+
+  export type FavoriteMovieUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<FavoriteMovieCreateWithoutUserInput, FavoriteMovieUncheckedCreateWithoutUserInput> | FavoriteMovieCreateWithoutUserInput[] | FavoriteMovieUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: FavoriteMovieCreateOrConnectWithoutUserInput | FavoriteMovieCreateOrConnectWithoutUserInput[]
+    upsert?: FavoriteMovieUpsertWithWhereUniqueWithoutUserInput | FavoriteMovieUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: FavoriteMovieCreateManyUserInputEnvelope
+    set?: FavoriteMovieWhereUniqueInput | FavoriteMovieWhereUniqueInput[]
+    disconnect?: FavoriteMovieWhereUniqueInput | FavoriteMovieWhereUniqueInput[]
+    delete?: FavoriteMovieWhereUniqueInput | FavoriteMovieWhereUniqueInput[]
+    connect?: FavoriteMovieWhereUniqueInput | FavoriteMovieWhereUniqueInput[]
+    update?: FavoriteMovieUpdateWithWhereUniqueWithoutUserInput | FavoriteMovieUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: FavoriteMovieUpdateManyWithWhereWithoutUserInput | FavoriteMovieUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: FavoriteMovieScalarWhereInput | FavoriteMovieScalarWhereInput[]
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -3330,6 +3599,129 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type UserCreateWithoutFavoriteMoviesInput = {
+    name: string
+    email: string
+    password: string
+    createdAt?: Date | string
+  }
+
+  export type UserUncheckedCreateWithoutFavoriteMoviesInput = {
+    id?: number
+    name: string
+    email: string
+    password: string
+    createdAt?: Date | string
+  }
+
+  export type UserCreateOrConnectWithoutFavoriteMoviesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutFavoriteMoviesInput, UserUncheckedCreateWithoutFavoriteMoviesInput>
+  }
+
+  export type UserUpsertWithoutFavoriteMoviesInput = {
+    update: XOR<UserUpdateWithoutFavoriteMoviesInput, UserUncheckedUpdateWithoutFavoriteMoviesInput>
+    create: XOR<UserCreateWithoutFavoriteMoviesInput, UserUncheckedCreateWithoutFavoriteMoviesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutFavoriteMoviesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutFavoriteMoviesInput, UserUncheckedUpdateWithoutFavoriteMoviesInput>
+  }
+
+  export type UserUpdateWithoutFavoriteMoviesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUncheckedUpdateWithoutFavoriteMoviesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FavoriteMovieCreateWithoutUserInput = {
+    tmdbId: number
+    titulo: string
+    createdAt?: Date | string
+  }
+
+  export type FavoriteMovieUncheckedCreateWithoutUserInput = {
+    id?: number
+    tmdbId: number
+    titulo: string
+    createdAt?: Date | string
+  }
+
+  export type FavoriteMovieCreateOrConnectWithoutUserInput = {
+    where: FavoriteMovieWhereUniqueInput
+    create: XOR<FavoriteMovieCreateWithoutUserInput, FavoriteMovieUncheckedCreateWithoutUserInput>
+  }
+
+  export type FavoriteMovieCreateManyUserInputEnvelope = {
+    data: FavoriteMovieCreateManyUserInput | FavoriteMovieCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FavoriteMovieUpsertWithWhereUniqueWithoutUserInput = {
+    where: FavoriteMovieWhereUniqueInput
+    update: XOR<FavoriteMovieUpdateWithoutUserInput, FavoriteMovieUncheckedUpdateWithoutUserInput>
+    create: XOR<FavoriteMovieCreateWithoutUserInput, FavoriteMovieUncheckedCreateWithoutUserInput>
+  }
+
+  export type FavoriteMovieUpdateWithWhereUniqueWithoutUserInput = {
+    where: FavoriteMovieWhereUniqueInput
+    data: XOR<FavoriteMovieUpdateWithoutUserInput, FavoriteMovieUncheckedUpdateWithoutUserInput>
+  }
+
+  export type FavoriteMovieUpdateManyWithWhereWithoutUserInput = {
+    where: FavoriteMovieScalarWhereInput
+    data: XOR<FavoriteMovieUpdateManyMutationInput, FavoriteMovieUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type FavoriteMovieScalarWhereInput = {
+    AND?: FavoriteMovieScalarWhereInput | FavoriteMovieScalarWhereInput[]
+    OR?: FavoriteMovieScalarWhereInput[]
+    NOT?: FavoriteMovieScalarWhereInput | FavoriteMovieScalarWhereInput[]
+    id?: IntFilter<"FavoriteMovie"> | number
+    tmdbId?: IntFilter<"FavoriteMovie"> | number
+    titulo?: StringFilter<"FavoriteMovie"> | string
+    createdAt?: DateTimeFilter<"FavoriteMovie"> | Date | string
+    userId?: IntFilter<"FavoriteMovie"> | number
+  }
+
+  export type FavoriteMovieCreateManyUserInput = {
+    id?: number
+    tmdbId: number
+    titulo: string
+    createdAt?: Date | string
+  }
+
+  export type FavoriteMovieUpdateWithoutUserInput = {
+    tmdbId?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FavoriteMovieUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    tmdbId?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FavoriteMovieUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    tmdbId?: IntFieldUpdateOperationsInput | number
+    titulo?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 
