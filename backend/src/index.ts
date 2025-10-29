@@ -7,6 +7,7 @@ import {
     findMoviesById,
     findGenres,
 } from "./controllers/movieController";
+import favoritesRoutes from "./routes/favoritesRoutes";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -17,6 +18,7 @@ app.get("/api/movies", findMovies);
 app.get("/api/movies/:id", findMoviesById);
 app.get("/api/genres", findGenres);
 
+app.use("/api/favorites", favoritesRoutes);
 app.use("/api/auth", require("./routes/auth").default);
 
 app.listen(PORT, () => {
