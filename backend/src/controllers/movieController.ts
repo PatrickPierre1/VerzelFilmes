@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import {
+    getGenres,
     getMovies,
     getMoviesById,
     searchMoviesByName,
@@ -39,5 +40,14 @@ export const findMoviesById = async (req: Request, res: Response) => {
         return res.status(500).json({
             message: error.message || "Erro interno ao buscar filmes por ID.",
         });
+    }
+};
+
+export const findGenres = async (_req: Request, res: Response) => {
+    try {
+        const genres = await getGenres();
+        res.json(genres);
+    } catch (error) {
+        res.status(500).json({ message: "Erro interno do servidor" });
     }
 };

@@ -2,7 +2,11 @@ import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
 import cors from "cors";
-import { findMovies, findMoviesById } from "./controllers/movieController";
+import {
+    findMovies,
+    findMoviesById,
+    findGenres,
+} from "./controllers/movieController";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -11,6 +15,7 @@ app.use(express.json());
 
 app.get("/api/movies", findMovies);
 app.get("/api/movies/:id", findMoviesById);
+app.get("/api/genres", findGenres);
 
 app.use("/api/auth", require("./routes/auth").default);
 
