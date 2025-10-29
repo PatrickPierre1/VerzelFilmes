@@ -1,10 +1,73 @@
 import Header from "../components/Header";
+import { useState } from "react";
+import MovieCard from "../components/MovieCard";
+import { useQuery } from "@tanstack/react-query";
+import { searchMovies } from "../services/movieService";
+import { useFavorites } from "../hooks/useFavorites";
 
 const Index = () => {
+    const [searchQuery, setSearchQuery] = useState("");
+    const { favorites, toggleFavorite } = useFavorites();
+
+    const { data: movies, isLoading, isError, error } = useQuery({
+        queryKey: ['movies', searchQuery],
+        queryFn: () => searchMovies(searchQuery),
+        enabled: true, // A query será executada na montagem e quando searchQuery mudar
+    });
+
     return (
         <div className="min-h-screen">
-            <Header />
+            <Header
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
+                favoritesCount={favorites.length}
+            />
+            <main className="container px-4 py-8">
+                {searchQuery && !isLoading && (
+                    <div className="mb-6">
+                        <p className="text-lg text-muted-foreground">
+                            {movies?.length ?? 0} resultado(s) para "{searchQuery}"
+                        </p>
+                    </div>
+                )}
+
+                {isLoading && (
+                    <div className="flex min-h-[400px] items-center justify-center">
+                        <p className="text-lg text-muted-foreground">Carregando filmes...</p>
+                    </div>
+                )}
+
+                {isError && (
+                    <div className="flex min-h-[400px] items-center justify-center text-center">
+                        <div>
+                            <h2 className="mb-2 text-2xl font-semibold text-destructive">Erro ao buscar filmes</h2>
+                            <p className="text-muted-foreground">{error.message}</p>
+                        </div>
+                    </div>
+                )}
+
+                {!isLoading && !isError && movies?.length === 0 ? (
+                    <div className="flex min-h-[400px] items-center justify-center">
+                        <div className="text-center">
+                            <h2 className="mb-2 text-2xl font-semibold">Nenhum filme encontrado</h2>
+                            <p className="text-muted-foreground">Tente buscar com outros termos</p>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                        {movies?.map((movie) => (
+                            <MovieCard
+                                key={movie.id}
+                                movie={movie}
+                                isFavorite={favorites.includes(movie.id)}
+                                onToggleFavorite={toggleFavorite}
+                            />
+                        ))}
+                    </div>
+                )}
+            </main>
         </div>
     )
 };
+
 export default Index;

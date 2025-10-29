@@ -15,7 +15,7 @@ const MovieCard = ({ movie, isFavorite, onToggleFavorite }: MovieCardProps) => {
             <Link to={`/movie/${movie.id}`}>
                 <div className="aspect-[2/3] overflow-hidden">
                     <img
-                        src={movie.poster_path}
+                        src={"https://image.tmdb.org/t/p/w500" + movie.poster_path}
                         alt={movie.title}
                         className="h-full w-full object-cover transition-transform group-hover:scale-110"
                     />

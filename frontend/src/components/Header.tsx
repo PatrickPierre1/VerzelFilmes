@@ -3,7 +3,13 @@ import { Link } from "react-router-dom";
 import verzelLogo from "@/assets/verzel-logo.jpeg";
 import { Input } from "./ui/input";
 import { Badge } from "./ui/badge";
-const Header = () => {
+
+interface HeaderProps {
+    searchQuery: string;
+    onSearchChange: (query: string) => void;
+    favoritesCount: number;
+}
+const Header = ({ searchQuery, onSearchChange, favoritesCount }: HeaderProps) => {
     return (
         <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
             <div className="container flex h-16 items-center gap-6 px-4">
@@ -19,6 +25,8 @@ const Header = () => {
                     <Input
                         type="search"
                         placeholder="Buscar filmes..."
+                        value={searchQuery}
+                        onChange={(e) => onSearchChange(e.target.value)}
                         className="h-10 pl-10 bg-secondary border-border focus-visible:ring-primary"
                     />
                 </div>
@@ -29,8 +37,8 @@ const Header = () => {
                 >
                     <Heart className="h-5 w-5 text-primary fill-primary" />
                     <span className="font-medium">Favoritos</span>
-                    <Badge variant="secondary" className="bg-primary text-primary-foreground hover:bg-primary/80">
-                        5
+                    <Badge variant="secondary" className="bg-primary text-primary-foreground hover:bg-primary/80" >
+                        {favoritesCount}
                     </Badge>
                 </Link>
             </div>
