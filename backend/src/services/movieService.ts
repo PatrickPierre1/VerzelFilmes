@@ -13,7 +13,7 @@ export const getMovies = async (
     try {
         const genreQuery = genreId ? `&with_genres=${genreId}` : "";
         const response = await tmdbApi.get(
-            `/discover/movie?language=pt-BR&page=${page}${genreQuery}`
+            `/discover/movie?language=pt-BR&&sort_by=vote_count.desc&page=${page}${genreQuery}`
         );
         return response.data.results;
     } catch (error) {

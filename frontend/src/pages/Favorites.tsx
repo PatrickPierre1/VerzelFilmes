@@ -7,12 +7,13 @@ import { useQueries } from "@tanstack/react-query";
 import { getMovieById } from "../services/movieService";
 import Header from "../components/Header";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const Favorites = () => {
     const navigate = useNavigate();
     const { favorites, toggleFavorite } = useFavorites();
     const [inputValue, setInputValue] = useState("");
-
+    
     const favoriteMoviesQueries = useQueries({
         queries: favorites.map((id) => {
             return {
@@ -83,7 +84,10 @@ const Favorites = () => {
                                 key={movie.id}
                                 movie={movie!}
                                 isFavorite={true}
-                                onToggleFavorite={toggleFavorite}
+                                onToggleFavorite={(movieId) => {
+                                    toggleFavorite(movieId);
+                                    toast.success("Filme removido dos favoritos!");
+                                }}
                             />
                         ))}
                     </div>

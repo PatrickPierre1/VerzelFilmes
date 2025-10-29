@@ -5,11 +5,13 @@ import { TooltipProvider } from './components/ui/tooltip';
 import Index from './pages/Index';
 import MovieDetails from './pages/MovieDetails';
 import Favorites from './pages/Favorites';
+import { Toaster } from './components/ui/sonner';
 const queryClient = new QueryClient();
 function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <Toaster />
       <TooltipProvider>
         <BrowserRouter>
           <Routes>

@@ -6,6 +6,15 @@ import { getMovies, searchMovies } from "../services/movieService";
 import { useFavorites } from "../hooks/useFavorites";
 import { useSearchParams } from "react-router-dom";
 import AuthModal from "../components/AuthModal";
+import { toast } from "sonner";
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from "../components/ui/pagination";
 
 const Index = () => {
     const [searchParams] = useSearchParams();
@@ -16,6 +25,7 @@ const Index = () => {
     const [searchQuery, setSearchQuery] = useState(initialQuery);
     const { favorites, toggleFavorite } = useFavorites();
     const [selectedGenre, setSelectedGenre] = useState(initialGenre);
+    const [page, setPage] = useState(1);
 
     const [pendingFavoriteMovieId, setPendingFavoriteMovieId] = useState<number | null>(null);
 
@@ -25,7 +35,13 @@ const Index = () => {
 
     const handleToggleFavorite = (movieId: number) => {
         if (isAuthenticated()) {
+            const isCurrentlyFavorite = favorites.includes(movieId);
             toggleFavorite(movieId);
+            if (isCurrentlyFavorite) {
+                toast.success("Filme removido dos favoritos!");
+            } else {
+                toast.success("Filme adicionado aos favoritos!");
+            }
         } else {
             setPendingFavoriteMovieId(movieId);
             setAuthModalOpen(true);
@@ -35,12 +51,14 @@ const Index = () => {
     const handleAuthSuccess = () => {
         if (pendingFavoriteMovieId !== null) {
             toggleFavorite(pendingFavoriteMovieId);
+            toast.success("Filme adicionado aos favoritos!");
             setPendingFavoriteMovieId(null);
         }
     };
 
     useEffect(() => {
         const timer = setTimeout(() => {
+            setPage(1);
             setSearchQuery(inputValue);
         }, 500);
 
@@ -50,17 +68,18 @@ const Index = () => {
     }, [inputValue]);
 
     useEffect(() => {
+        setPage(1);
         setSelectedGenre(searchParams.get("genre") || "");
     }, [searchParams]);
 
     const { data: movies, isLoading, isError, error } = useQuery({
-        queryKey: ['movies', searchQuery, selectedGenre],
+        queryKey: ['movies', searchQuery, selectedGenre, page],
         queryFn: () => {
             const genreId = selectedGenre ? parseInt(selectedGenre, 10) : undefined;
             if (searchQuery) {
-                return searchMovies(searchQuery);
+                return searchMovies(searchQuery, page);
             }
-            return getMovies({ genreId });
+            return getMovies({ page, genreId });
         },
         enabled: true
     });
@@ -120,6 +139,36 @@ const Index = () => {
                             />
                         ))}
                     </div>
+                )}
+
+                {!isLoading && !isError && movies && movies.length > 0 && (
+                    <Pagination className="mt-8">
+                        <PaginationContent>
+                            <PaginationItem>
+                                <PaginationPrevious size={"sm"} onClick={() => setPage(p => Math.max(p - 1, 1))} className={page === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}>
+                                    Anterior
+                                </PaginationPrevious>
+                            </PaginationItem>
+                            {page > 1 && (
+                                <PaginationItem>
+                                    <PaginationLink size={"sm"} onClick={() => setPage(page - 1)}>{page - 1}</PaginationLink>
+                                </PaginationItem>
+                            )}
+                            <PaginationItem>
+                                <PaginationLink size={"sm"} isActive>{page}</PaginationLink>
+                            </PaginationItem>
+                            {movies.length === 20 && (
+                                <PaginationItem>
+                                    <PaginationLink size={"sm"} onClick={() => setPage(page + 1)}>{page + 1}</PaginationLink>
+                                </PaginationItem>
+                            )}
+                            <PaginationItem>
+                                <PaginationNext size={"sm"} onClick={() => setPage(p => p + 1)} className={movies.length < 20 ? "pointer-events-none opacity-50" : "cursor-pointer"}>
+                                    Próxima
+                                </PaginationNext>
+                            </PaginationItem>
+                        </PaginationContent>
+                    </Pagination>
                 )}
             </main>
         </div>

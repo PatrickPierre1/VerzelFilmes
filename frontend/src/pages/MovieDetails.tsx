@@ -8,6 +8,7 @@ import { getMovieById } from "../services/movieService";
 import type { MovieDetailsType } from "../types/movies";
 import Header from "../components/Header";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const MovieDetails = () => {
     const { id } = useParams();
@@ -98,7 +99,14 @@ const MovieDetails = () => {
                                     </div>
 
                                     <Button
-                                        onClick={() => toggleFavorite(movie.id)}
+                                        onClick={() => {
+                                            toggleFavorite(movie.id);
+                                            if (isFavorite) {
+                                                toast.success("Filme removido dos favoritos!");
+                                            } else {
+                                                toast.success("Filme adicionado aos favoritos!");
+                                            }
+                                        }}
                                         variant={isFavorite ? "default" : "outline"}
                                         size="lg"
                                         className="transition-all hover:scale-105"
