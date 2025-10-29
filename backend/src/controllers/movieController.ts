@@ -1,18 +1,26 @@
-import { Router, Request, Response } from "express";
-import { getMovies } from "../services/movieService";
+import { Request, Response } from "express";
+import { getMovies, searchMoviesByName } from "../services/movieService";
 
-const router = Router();
-
-router.get("/", async (req: Request, res: Response) => {
-    const page = Number(req.query.page) || 1;
+export const findMovies = async (
+    req: Request,
+    res: Response
+): Promise<Response> => {
+    const movieName = req.query.name as string;
+    const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
 
     try {
-        const movies = await getMovies(page);
-        res.json(movies);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Erro ao buscar filmes." });
-    }
-});
+        let results;
 
-export default router;
+        if (movieName && movieName.trim().length > 0) {
+            results = await searchMoviesByName(movieName, page);
+        } else {
+            results = await getMovies(page);
+        }
+
+        return res.status(200).json(results);
+    } catch (error: any) {
+        return res.status(500).json({
+            message: error.message || "Erro interno ao buscar filmes.",
+        });
+    }
+};

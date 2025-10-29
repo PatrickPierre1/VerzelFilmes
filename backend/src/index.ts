@@ -1,15 +1,15 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
-import express from 'express';
-import movieController from './controllers/movieController';
+import express from "express";
+import { findMovies } from "./controllers/movieController";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(express.json());
 
-app.use('/api/movies', movieController);
+app.get("/api/movies", findMovies);
 
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando na porta ${PORT}`);
+    console.log(`🚀 Servidor rodando na porta ${PORT}`);
 });
