@@ -67,6 +67,29 @@ const favoriteService = {
 
         await prisma.favoriteMovie.delete({ where: { id: favoriteMovieId } });
     },
+
+    /**
+     * Retorna a lista de filmes favoritos de um usuário com base no token de compartilhamento.
+     * @param shareToken - O token de compartilhamento do usuário.
+     * @returns Um objeto contendo o nome do usuário e sua lista de filmes favoritos.
+     */
+    async getFavoritesByShareToken(shareToken: string): Promise<{
+        userName: string | null;
+        favorites: FavoriteMovie[];
+    } | null> {
+        const user = await prisma.user.findUnique({
+            where: { shareToken },
+            include: {
+                favoriteMovies: {
+                    orderBy: { createdAt: "desc" },
+                },
+            },
+        });
+
+        if (!user) return null;
+
+        return { userName: user.name, favorites: user.favoriteMovies };
+    },
 };
 
 export default favoriteService;

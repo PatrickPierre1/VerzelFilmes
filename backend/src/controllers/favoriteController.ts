@@ -56,6 +56,23 @@ const favoriteController = {
             return res.status(400).json({ message: error.message });
         }
     },
+
+    async getSharedFavorites(req: Request, res: Response) {
+        try {
+            const { shareToken } = req.params;
+            const result = await favoriteService.getFavoritesByShareToken(shareToken);
+            if (!result) {
+                return res.status(404).json({ message: "Lista de favoritos não encontrada." });
+            }
+            res.json(result);
+        } catch (error) {
+            if (error instanceof Error) {
+                res.status(500).json({ message: error.message });
+            } else {
+                res.status(500).json({ message: "An unknown error occurred" });
+            }
+        }
+    }
 };
 
 export default favoriteController;

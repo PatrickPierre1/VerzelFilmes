@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import { randomUUID } from "crypto";
 import jwt from "jsonwebtoken";
 import { prisma } from "../lib/prisma";
 
@@ -60,6 +61,24 @@ const authService = {
             expiresIn: "1h",
         });
         return token;
+    },
+
+    async getOrCreateShareToken(userId: number): Promise<string> {
+        let user = await prisma.user.findUnique({
+            where: { id: userId },
+            select: { shareToken: true },
+        });
+
+        if (user?.shareToken) {
+            return user.shareToken;
+        }
+
+        const newShareToken = randomUUID();
+        const updatedUser = await prisma.user.update({
+            where: { id: userId },
+            data: { shareToken: newShareToken },
+        });
+        return updatedUser.shareToken!;
     },
 };
 

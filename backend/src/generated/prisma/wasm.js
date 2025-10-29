@@ -105,6 +105,7 @@ exports.Prisma.UserScalarFieldEnum = {
   name: 'name',
   email: 'email',
   password: 'password',
+  shareToken: 'shareToken',
   createdAt: 'createdAt'
 };
 
@@ -117,10 +118,16 @@ exports.Prisma.FavoriteMovieOrderByRelevanceFieldEnum = {
   titulo: 'titulo'
 };
 
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+
 exports.Prisma.UserOrderByRelevanceFieldEnum = {
   name: 'name',
   email: 'email',
-  password: 'password'
+  password: 'password',
+  shareToken: 'shareToken'
 };
 
 
@@ -175,13 +182,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel FavoriteMovie {\n  id        Int      @id @default(autoincrement())\n  tmdbId    Int      @map(\"tmdb_id\")\n  titulo    String   @db.VarChar(255)\n  createdAt DateTime @default(now())\n  userId    Int      @map(\"user_id\")\n  user      User     @relation(fields: [userId], references: [id])\n\n  @@unique([userId, tmdbId])\n  @@map(\"favorite_movies\")\n}\n\nmodel User {\n  id             Int             @id @default(autoincrement())\n  name           String\n  email          String          @unique\n  password       String\n  createdAt      DateTime        @default(now()) @map(\"created_at\")\n  favoriteMovies FavoriteMovie[]\n\n  @@map(\"users\")\n}\n",
-  "inlineSchemaHash": "94f552ac7060a4fd7e20a31ea7c0bb421839a238f8fb6f5e7cd02fa7abdb669d",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel FavoriteMovie {\n  id        Int      @id @default(autoincrement())\n  tmdbId    Int      @map(\"tmdb_id\")\n  titulo    String   @db.VarChar(255)\n  createdAt DateTime @default(now())\n  userId    Int      @map(\"user_id\")\n  user      User     @relation(fields: [userId], references: [id])\n\n  @@unique([userId, tmdbId])\n  @@map(\"favorite_movies\")\n}\n\nmodel User {\n  id             Int             @id @default(autoincrement())\n  name           String\n  email          String          @unique\n  password       String\n  shareToken     String?         @unique @default(uuid())\n  createdAt      DateTime        @default(now()) @map(\"created_at\")\n  favoriteMovies FavoriteMovie[]\n\n  @@map(\"users\")\n}\n",
+  "inlineSchemaHash": "e929ffbae224a3992aaad9bf330d37a48a238fcd690399a985b1b970d78aca00",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"FavoriteMovie\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"tmdbId\",\"kind\":\"scalar\",\"type\":\"Int\",\"dbName\":\"tmdb_id\"},{\"name\":\"titulo\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\",\"dbName\":\"user_id\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"FavoriteMovieToUser\"}],\"dbName\":\"favorite_movies\"},\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"favoriteMovies\",\"kind\":\"object\",\"type\":\"FavoriteMovie\",\"relationName\":\"FavoriteMovieToUser\"}],\"dbName\":\"users\"}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"FavoriteMovie\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"tmdbId\",\"kind\":\"scalar\",\"type\":\"Int\",\"dbName\":\"tmdb_id\"},{\"name\":\"titulo\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\",\"dbName\":\"user_id\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"FavoriteMovieToUser\"}],\"dbName\":\"favorite_movies\"},\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"shareToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"favoriteMovies\",\"kind\":\"object\",\"type\":\"FavoriteMovie\",\"relationName\":\"FavoriteMovieToUser\"}],\"dbName\":\"users\"}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

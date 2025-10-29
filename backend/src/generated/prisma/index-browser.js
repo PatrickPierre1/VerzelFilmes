@@ -133,6 +133,7 @@ exports.Prisma.UserScalarFieldEnum = {
   name: 'name',
   email: 'email',
   password: 'password',
+  shareToken: 'shareToken',
   createdAt: 'createdAt'
 };
 
@@ -145,10 +146,16 @@ exports.Prisma.FavoriteMovieOrderByRelevanceFieldEnum = {
   titulo: 'titulo'
 };
 
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+
 exports.Prisma.UserOrderByRelevanceFieldEnum = {
   name: 'name',
   email: 'email',
-  password: 'password'
+  password: 'password',
+  shareToken: 'shareToken'
 };
 
 

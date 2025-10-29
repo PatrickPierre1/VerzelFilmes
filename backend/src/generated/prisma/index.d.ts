@@ -1962,6 +1962,7 @@ export namespace Prisma {
     name: string | null
     email: string | null
     password: string | null
+    shareToken: string | null
     createdAt: Date | null
   }
 
@@ -1970,6 +1971,7 @@ export namespace Prisma {
     name: string | null
     email: string | null
     password: string | null
+    shareToken: string | null
     createdAt: Date | null
   }
 
@@ -1978,6 +1980,7 @@ export namespace Prisma {
     name: number
     email: number
     password: number
+    shareToken: number
     createdAt: number
     _all: number
   }
@@ -1996,6 +1999,7 @@ export namespace Prisma {
     name?: true
     email?: true
     password?: true
+    shareToken?: true
     createdAt?: true
   }
 
@@ -2004,6 +2008,7 @@ export namespace Prisma {
     name?: true
     email?: true
     password?: true
+    shareToken?: true
     createdAt?: true
   }
 
@@ -2012,6 +2017,7 @@ export namespace Prisma {
     name?: true
     email?: true
     password?: true
+    shareToken?: true
     createdAt?: true
     _all?: true
   }
@@ -2107,6 +2113,7 @@ export namespace Prisma {
     name: string
     email: string
     password: string
+    shareToken: string | null
     createdAt: Date
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
@@ -2134,6 +2141,7 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     password?: boolean
+    shareToken?: boolean
     createdAt?: boolean
     favoriteMovies?: boolean | User$favoriteMoviesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -2146,10 +2154,11 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     password?: boolean
+    shareToken?: boolean
     createdAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "createdAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "shareToken" | "createdAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     favoriteMovies?: boolean | User$favoriteMoviesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -2165,6 +2174,7 @@ export namespace Prisma {
       name: string
       email: string
       password: string
+      shareToken: string | null
       createdAt: Date
     }, ExtArgs["result"]["user"]>
     composites: {}
@@ -2540,6 +2550,7 @@ export namespace Prisma {
     readonly name: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
+    readonly shareToken: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
   }
     
@@ -2956,6 +2967,7 @@ export namespace Prisma {
     name: 'name',
     email: 'email',
     password: 'password',
+    shareToken: 'shareToken',
     createdAt: 'createdAt'
   };
 
@@ -2977,10 +2989,19 @@ export namespace Prisma {
   export type FavoriteMovieOrderByRelevanceFieldEnum = (typeof FavoriteMovieOrderByRelevanceFieldEnum)[keyof typeof FavoriteMovieOrderByRelevanceFieldEnum]
 
 
+  export const NullsOrder: {
+    first: 'first',
+    last: 'last'
+  };
+
+  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
   export const UserOrderByRelevanceFieldEnum: {
     name: 'name',
     email: 'email',
-    password: 'password'
+    password: 'password',
+    shareToken: 'shareToken'
   };
 
   export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
@@ -3089,6 +3110,7 @@ export namespace Prisma {
     name?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
+    shareToken?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     favoriteMovies?: FavoriteMovieListRelationFilter
   }
@@ -3098,6 +3120,7 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    shareToken?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     favoriteMovies?: FavoriteMovieOrderByRelationAggregateInput
     _relevance?: UserOrderByRelevanceInput
@@ -3106,6 +3129,7 @@ export namespace Prisma {
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: number
     email?: string
+    shareToken?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
@@ -3113,13 +3137,14 @@ export namespace Prisma {
     password?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
     favoriteMovies?: FavoriteMovieListRelationFilter
-  }, "id" | "email">
+  }, "id" | "email" | "shareToken">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    shareToken?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
@@ -3136,6 +3161,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"User"> | string
     email?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
+    shareToken?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
 
@@ -3195,6 +3221,7 @@ export namespace Prisma {
     name: string
     email: string
     password: string
+    shareToken?: string | null
     createdAt?: Date | string
     favoriteMovies?: FavoriteMovieCreateNestedManyWithoutUserInput
   }
@@ -3204,6 +3231,7 @@ export namespace Prisma {
     name: string
     email: string
     password: string
+    shareToken?: string | null
     createdAt?: Date | string
     favoriteMovies?: FavoriteMovieUncheckedCreateNestedManyWithoutUserInput
   }
@@ -3212,6 +3240,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    shareToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     favoriteMovies?: FavoriteMovieUpdateManyWithoutUserNestedInput
   }
@@ -3221,6 +3250,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    shareToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     favoriteMovies?: FavoriteMovieUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -3230,6 +3260,7 @@ export namespace Prisma {
     name: string
     email: string
     password: string
+    shareToken?: string | null
     createdAt?: Date | string
   }
 
@@ -3237,6 +3268,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    shareToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -3245,6 +3277,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    shareToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -3385,10 +3418,30 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type FavoriteMovieListRelationFilter = {
     every?: FavoriteMovieWhereInput
     some?: FavoriteMovieWhereInput
     none?: FavoriteMovieWhereInput
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
   }
 
   export type FavoriteMovieOrderByRelationAggregateInput = {
@@ -3406,6 +3459,7 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    shareToken?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -3418,6 +3472,7 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    shareToken?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -3426,11 +3481,30 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     password?: SortOrder
+    shareToken?: SortOrder
     createdAt?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
     id?: SortOrder
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type UserCreateNestedOneWithoutFavoriteMoviesInput = {
@@ -3475,6 +3549,10 @@ export namespace Prisma {
     connectOrCreate?: FavoriteMovieCreateOrConnectWithoutUserInput | FavoriteMovieCreateOrConnectWithoutUserInput[]
     createMany?: FavoriteMovieCreateManyUserInputEnvelope
     connect?: FavoriteMovieWhereUniqueInput | FavoriteMovieWhereUniqueInput[]
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
   export type FavoriteMovieUpdateManyWithoutUserNestedInput = {
@@ -3601,10 +3679,55 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type UserCreateWithoutFavoriteMoviesInput = {
     name: string
     email: string
     password: string
+    shareToken?: string | null
     createdAt?: Date | string
   }
 
@@ -3613,6 +3736,7 @@ export namespace Prisma {
     name: string
     email: string
     password: string
+    shareToken?: string | null
     createdAt?: Date | string
   }
 
@@ -3636,6 +3760,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    shareToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -3644,6 +3769,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    shareToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
