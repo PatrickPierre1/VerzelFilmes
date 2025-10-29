@@ -34,7 +34,7 @@ export const searchMoviesByName = async (
     }
 };
 
-export const getMoviesById = async (id: number): Promise<Movie[]> => {
+export const getMoviesById = async (id: number): Promise<Movie> => {
     try {
         const response = await tmdbApi.get(`/movie/${id}?language=pt-BR`);
         return response.data;

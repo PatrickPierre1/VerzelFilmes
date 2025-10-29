@@ -3,17 +3,21 @@ import { useState, useEffect } from "react";
 import MovieCard from "../components/MovieCard";
 import { useQuery } from "@tanstack/react-query";
 import { searchMovies } from "../services/movieService";
-import { useFavorites } from "../hooks/useFavorites";
+import { useFavorites } from "../hooks/useFavorites"; 
+import { useSearchParams } from "react-router-dom";
 
 const Index = () => {
-    const [inputValue, setInputValue] = useState("");
-    const [searchQuery, setSearchQuery] = useState("");
+    const [searchParams] = useSearchParams();
+    const initialQuery = searchParams.get("q") || "";
+
+    const [inputValue, setInputValue] = useState(initialQuery);
+    const [searchQuery, setSearchQuery] = useState(initialQuery);
     const { favorites, toggleFavorite } = useFavorites();
 
     useEffect(() => {
         const timer = setTimeout(() => {
             setSearchQuery(inputValue);
-        }, 500); // Atraso de 500ms
+        }, 500);
 
         return () => {
             clearTimeout(timer);
