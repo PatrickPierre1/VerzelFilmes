@@ -3,36 +3,21 @@ import { Heart, Loader2 } from "lucide-react";
 import MovieCard from "../components/MovieCard";
 import { useFavorites } from "../hooks/useFavorites";
 import { Button } from "../components/ui/button";
-import { useQueries } from "@tanstack/react-query";
-import { getMovieById } from "../services/movieService";
 import Header from "../components/Header";
 import { useState } from "react";
 import { toast } from "sonner";
+import type { Movie } from "../types/movies";
 
 const Favorites = () => {
     const navigate = useNavigate();
-    const { favorites, toggleFavorite } = useFavorites();
+    const { favorites, removeFavorite, isLoading } = useFavorites();
     const [inputValue, setInputValue] = useState("");
-    
-    const favoriteMoviesQueries = useQueries({
-        queries: favorites.map((id) => {
-            return {
-                queryKey: ['movie', id],
-                queryFn: () => getMovieById(id),
-            };
-        }),
-    });
+
     const handleSearch = (query: string) => {
         if (query.trim()) {
             navigate(`/?q=${encodeURIComponent(query)}`);
         }
     };
-
-    const isLoading = favoriteMoviesQueries.some((query) => query.isLoading);
-
-    const favoriteMovies = favoriteMoviesQueries
-        .map((query) => query.data)
-        .filter(Boolean);
 
     if (favorites.length === 0) {
         return (
@@ -79,13 +64,13 @@ const Favorites = () => {
                     </div>
                 ) : (
                     <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-                        {favoriteMovies.map((movie: any) => (
+                        {favorites.map((fav) => (
                             <MovieCard
-                                key={movie.id}
-                                movie={movie!}
+                                key={fav.id}
+                                movie={{ id: fav.tmdbId, title: fav.titulo } as Movie}
                                 isFavorite={true}
-                                onToggleFavorite={(movieId) => {
-                                    toggleFavorite(movieId);
+                                onToggleFavorite={() => {
+                                    removeFavorite(fav.tmdbId);
                                     toast.success("Filme removido dos favoritos!");
                                 }}
                             />

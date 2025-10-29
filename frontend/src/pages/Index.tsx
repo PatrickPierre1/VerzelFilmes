@@ -15,6 +15,7 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "../components/ui/pagination";
+import type { Movie } from "../types/movies";
 
 const Index = () => {
     const [searchParams] = useSearchParams();
@@ -23,36 +24,37 @@ const Index = () => {
     const [authModalOpen, setAuthModalOpen] = useState(false);
     const [inputValue, setInputValue] = useState(initialQuery);
     const [searchQuery, setSearchQuery] = useState(initialQuery);
-    const { favorites, toggleFavorite } = useFavorites();
+    const { favoriteTmdbIds, addFavorite, removeFavorite } = useFavorites();
     const [selectedGenre, setSelectedGenre] = useState(initialGenre);
     const [page, setPage] = useState(1);
 
-    const [pendingFavoriteMovieId, setPendingFavoriteMovieId] = useState<number | null>(null);
+    const [pendingFavoriteMovie, setPendingFavoriteMovie] = useState<Movie | null>(null);
 
     const isAuthenticated = () => {
         return localStorage.getItem("authToken") !== null && localStorage.getItem("user") !== null;
     };
 
-    const handleToggleFavorite = (movieId: number) => {
+    const handleToggleFavorite = (movie: Movie) => {
         if (isAuthenticated()) {
-            const isCurrentlyFavorite = favorites.includes(movieId);
-            toggleFavorite(movieId);
+            const isCurrentlyFavorite = favoriteTmdbIds.has(movie.id);
             if (isCurrentlyFavorite) {
+                removeFavorite(movie.id);
                 toast.success("Filme removido dos favoritos!");
             } else {
+                addFavorite({ tmdbId: movie.id, titulo: movie.title });
                 toast.success("Filme adicionado aos favoritos!");
             }
         } else {
-            setPendingFavoriteMovieId(movieId);
+            setPendingFavoriteMovie(movie);
             setAuthModalOpen(true);
         }
     };
 
     const handleAuthSuccess = () => {
-        if (pendingFavoriteMovieId !== null) {
-            toggleFavorite(pendingFavoriteMovieId);
+        if (pendingFavoriteMovie !== null) {
+            addFavorite({ tmdbId: pendingFavoriteMovie.id, titulo: pendingFavoriteMovie.title });
             toast.success("Filme adicionado aos favoritos!");
-            setPendingFavoriteMovieId(null);
+            setPendingFavoriteMovie(null);
         }
     };
 
@@ -89,7 +91,7 @@ const Index = () => {
             <Header
                 searchQuery={inputValue}
                 onSearchChange={setInputValue}
-                favoritesCount={favorites.length}
+                favoritesCount={favoriteTmdbIds.size}
                 selectedGenre={selectedGenre}
             />
             <AuthModal
@@ -134,7 +136,7 @@ const Index = () => {
                             <MovieCard
                                 key={movie.id}
                                 movie={movie}
-                                isFavorite={favorites.includes(movie.id)}
+                                isFavorite={favoriteTmdbIds.has(movie.id)}
                                 onToggleFavorite={handleToggleFavorite}
                             />
                         ))}

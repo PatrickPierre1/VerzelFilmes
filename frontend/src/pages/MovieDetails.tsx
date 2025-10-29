@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { Star, Clock, Calendar, Heart, ArrowLeft } from "lucide-react";
+import { Star, Clock, Calendar, Heart } from "lucide-react";
 import { useFavorites } from "../hooks/useFavorites";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
@@ -7,26 +7,18 @@ import { useQuery } from "@tanstack/react-query";
 import { getMovieById } from "../services/movieService";
 import type { MovieDetailsType } from "../types/movies";
 import Header from "../components/Header";
-import { useState } from "react";
 import { toast } from "sonner";
 
 const MovieDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [inputValue, setInputValue] = useState("");
-    const { favorites, toggleFavorite } = useFavorites();
+    const { favoriteTmdbIds, addFavorite, removeFavorite } = useFavorites();
 
     const { data: movie, isLoading, isError, error } = useQuery<MovieDetailsType, Error>({
         queryKey: ['movie', id],
         queryFn: () => getMovieById(Number(id)),
         enabled: !!id,
     });
-
-    const handleSearch = (query: string) => {
-        if (query.trim()) {
-            navigate(`/?q=${encodeURIComponent(query)}`);
-        }
-    };
 
     if (isLoading) {
         return <div className="flex min-h-screen items-center justify-center"><p className="text-lg text-muted-foreground">Carregando detalhes do filme...</p></div>;
@@ -46,15 +38,23 @@ const MovieDetails = () => {
         );
     }
 
-    const isFavorite = favorites.includes(movie.id);
+    const isFavorite = favoriteTmdbIds.has(movie.id);
+    const handleToggleFavorite = () => {
+        if (isFavorite) {
+            removeFavorite(movie.id);
+            toast.success("Filme removido dos favoritos!");
+        } else {
+            addFavorite({ tmdbId: movie.id, titulo: movie.title });
+            toast.success("Filme adicionado aos favoritos!");
+        }
+    };
 
     return (
         <div className="min-h-screen">
             <Header
-                searchQuery={inputValue}
-                onSearchChange={setInputValue}
-                favoritesCount={favorites.length}
-                onSearch={handleSearch}
+                searchQuery={""}
+                onSearchChange={() => { }}
+                favoritesCount={favoriteTmdbIds.size}
             />
             <div className="relative">
                 <div className="absolute inset-0 overflow-hidden">
@@ -99,14 +99,7 @@ const MovieDetails = () => {
                                     </div>
 
                                     <Button
-                                        onClick={() => {
-                                            toggleFavorite(movie.id);
-                                            if (isFavorite) {
-                                                toast.success("Filme removido dos favoritos!");
-                                            } else {
-                                                toast.success("Filme adicionado aos favoritos!");
-                                            }
-                                        }}
+                                        onClick={handleToggleFavorite}
                                         variant={isFavorite ? "default" : "outline"}
                                         size="lg"
                                         className="transition-all hover:scale-105"

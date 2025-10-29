@@ -41,6 +41,9 @@ const AuthModal = ({ open, onOpenChange, onAuthSuccess }: AuthModalProps) => {
 
                 localStorage.setItem("user", JSON.stringify(user));
 
+                // Dispara um evento para notificar outras partes da aplicação sobre a mudança de autenticação
+                window.dispatchEvent(new Event("authChange"));
+
                 onAuthSuccess();
 
                 onOpenChange(false);
