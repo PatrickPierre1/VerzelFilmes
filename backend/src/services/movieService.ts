@@ -33,3 +33,13 @@ export const searchMoviesByName = async (
         throw new Error("Falha ao buscar filmes por nome no TMDB");
     }
 };
+
+export const getMoviesById = async (id: number): Promise<Movie[]> => {
+    try {
+        const response = await tmdbApi.get(`/movie/${id}?language=pt-BR`);
+        return response.data;
+    } catch (error) {
+        console.error("Erro ao buscar filmes do TMDB:", error);
+        throw new Error("Falha ao buscar filmes do TMDB");
+    }
+};

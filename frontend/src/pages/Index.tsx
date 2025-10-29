@@ -1,25 +1,36 @@
 import Header from "../components/Header";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MovieCard from "../components/MovieCard";
 import { useQuery } from "@tanstack/react-query";
 import { searchMovies } from "../services/movieService";
 import { useFavorites } from "../hooks/useFavorites";
 
 const Index = () => {
+    const [inputValue, setInputValue] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
     const { favorites, toggleFavorite } = useFavorites();
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setSearchQuery(inputValue);
+        }, 500); // Atraso de 500ms
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [inputValue]);
 
     const { data: movies, isLoading, isError, error } = useQuery({
         queryKey: ['movies', searchQuery],
         queryFn: () => searchMovies(searchQuery),
-        enabled: true, // A query será executada na montagem e quando searchQuery mudar
+        enabled: true
     });
 
     return (
         <div className="min-h-screen">
             <Header
-                searchQuery={searchQuery}
-                onSearchChange={setSearchQuery}
+                searchQuery={inputValue}
+                onSearchChange={setInputValue}
                 favoritesCount={favorites.length}
             />
             <main className="container px-4 py-8">

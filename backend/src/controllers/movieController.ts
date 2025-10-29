@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
-import { getMovies, searchMoviesByName } from "../services/movieService";
+import {
+    getMovies,
+    getMoviesById,
+    searchMoviesByName,
+} from "../services/movieService";
 
 export const findMovies = async (
     req: Request,
@@ -21,6 +25,19 @@ export const findMovies = async (
     } catch (error: any) {
         return res.status(500).json({
             message: error.message || "Erro interno ao buscar filmes.",
+        });
+    }
+};
+
+export const findMoviesById = async (req: Request, res: Response) => {
+    const movieId = parseInt(req.params.id, 10);
+
+    try {
+        const results = await getMoviesById(movieId);
+        return res.status(200).json(results);
+    } catch (error: any) {
+        return res.status(500).json({
+            message: error.message || "Erro interno ao buscar filmes por ID.",
         });
     }
 };
