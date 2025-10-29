@@ -12,6 +12,8 @@ app.use(express.json());
 app.get("/api/movies", findMovies);
 app.get("/api/movies/:id", findMoviesById);
 
+app.use("/api/auth", require("./routes/auth").default);
+
 app.listen(PORT, () => {
     console.log(`🚀 Servidor rodando na porta ${PORT}`);
 });

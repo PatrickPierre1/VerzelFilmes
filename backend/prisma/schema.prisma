@@ -6,6 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -20,4 +21,14 @@ model FavoriteMovie {
   createdAt   DateTime @default(now())
 
   @@map("favorite_movies")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("users")
 }
