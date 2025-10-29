@@ -3,16 +3,39 @@ import { useState, useEffect } from "react";
 import MovieCard from "../components/MovieCard";
 import { useQuery } from "@tanstack/react-query";
 import { searchMovies } from "../services/movieService";
-import { useFavorites } from "../hooks/useFavorites"; 
+import { useFavorites } from "../hooks/useFavorites";
 import { useSearchParams } from "react-router-dom";
+import AuthModal from "../components/AuthModal";
 
 const Index = () => {
     const [searchParams] = useSearchParams();
     const initialQuery = searchParams.get("q") || "";
-
+    const [authModalOpen, setAuthModalOpen] = useState(false);
     const [inputValue, setInputValue] = useState(initialQuery);
     const [searchQuery, setSearchQuery] = useState(initialQuery);
     const { favorites, toggleFavorite } = useFavorites();
+
+    const [pendingFavoriteMovieId, setPendingFavoriteMovieId] = useState<number | null>(null);
+
+    const isAuthenticated = () => {
+        return localStorage.getItem("authToken") !== null && localStorage.getItem("user") !== null;
+    };
+
+    const handleToggleFavorite = (movieId: number) => {
+        if (isAuthenticated()) {
+            toggleFavorite(movieId);
+        } else {
+            setPendingFavoriteMovieId(movieId);
+            setAuthModalOpen(true);
+        }
+    };
+
+    const handleAuthSuccess = () => {
+        if (pendingFavoriteMovieId !== null) {
+            toggleFavorite(pendingFavoriteMovieId);
+            setPendingFavoriteMovieId(null);
+        }
+    };
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -36,6 +59,11 @@ const Index = () => {
                 searchQuery={inputValue}
                 onSearchChange={setInputValue}
                 favoritesCount={favorites.length}
+            />
+            <AuthModal
+                open={authModalOpen}
+                onOpenChange={setAuthModalOpen}
+                onAuthSuccess={handleAuthSuccess}
             />
             <main className="container px-4 py-8">
                 {searchQuery && !isLoading && (
@@ -75,7 +103,7 @@ const Index = () => {
                                 key={movie.id}
                                 movie={movie}
                                 isFavorite={favorites.includes(movie.id)}
-                                onToggleFavorite={toggleFavorite}
+                                onToggleFavorite={handleToggleFavorite}
                             />
                         ))}
                     </div>
