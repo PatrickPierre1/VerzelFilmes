@@ -2,7 +2,7 @@ import Header from "../components/Header";
 import { useState, useEffect } from "react";
 import MovieCard from "../components/MovieCard";
 import { useQuery } from "@tanstack/react-query";
-import { searchMovies } from "../services/movieService";
+import { getMovies, searchMovies } from "../services/movieService";
 import { useFavorites } from "../hooks/useFavorites";
 import { useSearchParams } from "react-router-dom";
 import AuthModal from "../components/AuthModal";
@@ -10,10 +10,12 @@ import AuthModal from "../components/AuthModal";
 const Index = () => {
     const [searchParams] = useSearchParams();
     const initialQuery = searchParams.get("q") || "";
+    const initialGenre = searchParams.get("genre") || "";
     const [authModalOpen, setAuthModalOpen] = useState(false);
     const [inputValue, setInputValue] = useState(initialQuery);
     const [searchQuery, setSearchQuery] = useState(initialQuery);
     const { favorites, toggleFavorite } = useFavorites();
+    const [selectedGenre, setSelectedGenre] = useState(initialGenre);
 
     const [pendingFavoriteMovieId, setPendingFavoriteMovieId] = useState<number | null>(null);
 
@@ -47,9 +49,19 @@ const Index = () => {
         };
     }, [inputValue]);
 
+    useEffect(() => {
+        setSelectedGenre(searchParams.get("genre") || "");
+    }, [searchParams]);
+
     const { data: movies, isLoading, isError, error } = useQuery({
-        queryKey: ['movies', searchQuery],
-        queryFn: () => searchMovies(searchQuery),
+        queryKey: ['movies', searchQuery, selectedGenre],
+        queryFn: () => {
+            const genreId = selectedGenre ? parseInt(selectedGenre, 10) : undefined;
+            if (searchQuery) {
+                return searchMovies(searchQuery);
+            }
+            return getMovies({ genreId });
+        },
         enabled: true
     });
 
@@ -59,6 +71,7 @@ const Index = () => {
                 searchQuery={inputValue}
                 onSearchChange={setInputValue}
                 favoritesCount={favorites.length}
+                selectedGenre={selectedGenre}
             />
             <AuthModal
                 open={authModalOpen}

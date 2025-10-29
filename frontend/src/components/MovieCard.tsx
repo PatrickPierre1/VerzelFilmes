@@ -14,11 +14,17 @@ const MovieCard = ({ movie, isFavorite, onToggleFavorite }: MovieCardProps) => {
         <Card className="group relative overflow-hidden border-border bg-gradient-card shadow-card transition-all hover:scale-105 hover:shadow-xl">
             <Link to={`/movie/${movie.id}`}>
                 <div className="aspect-[2/3] overflow-hidden">
-                    <img
-                        src={"https://image.tmdb.org/t/p/w500" + movie.poster_path}
-                        alt={movie.title}
-                        className="h-full w-full object-cover transition-transform group-hover:scale-110"
-                    />
+                    {movie.poster_path ? (
+                        <img
+                            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                            alt={movie.title}
+                            className="h-full w-full object-cover transition-transform group-hover:scale-110"
+                        />
+                    ) : (
+                        <div className="flex h-full w-full items-center justify-center bg-secondary text-muted-foreground">
+                            <span>Sem Imagem</span>
+                        </div>
+                    )}
                 </div>
             </Link>
 

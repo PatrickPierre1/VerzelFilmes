@@ -12,6 +12,9 @@ export const findMovies = async (
 ): Promise<Response> => {
     const movieName = req.query.name as string;
     const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
+    const genreId = req.query.with_genres
+        ? parseInt(req.query.with_genres as string, 10)
+        : undefined;
 
     try {
         let results;
@@ -19,7 +22,7 @@ export const findMovies = async (
         if (movieName && movieName.trim().length > 0) {
             results = await searchMoviesByName(movieName, page);
         } else {
-            results = await getMovies(page);
+            results = await getMovies(page, genreId);
         }
 
         return res.status(200).json(results);

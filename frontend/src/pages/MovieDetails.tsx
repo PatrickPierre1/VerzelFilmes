@@ -57,21 +57,29 @@ const MovieDetails = () => {
             />
             <div className="relative">
                 <div className="absolute inset-0 overflow-hidden">
-                    <img src={"https://image.tmdb.org/t/p/original" + movie.backdrop_path}
-                        alt={movie.title}
-                        className="h-full w-full object-cover opacity-20 blur-sm"
-                    />
+                    {movie.backdrop_path ? (
+                        <img src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+                            alt={movie.title}
+                            className="h-full w-full object-cover opacity-20 blur-sm"
+                        />
+                    ) : <div className="h-full w-full bg-background opacity-20" />}
                     <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/40" />
                 </div>
 
                 <div className="container relative px-4 py-12">
                     <div className="grid gap-8 lg:grid-cols-[300px_1fr]">
                         <div className="mx-auto w-full max-w-sm lg:mx-0">
-                            <img
-                                src={"https://image.tmdb.org/t/p/w500" + movie.poster_path}
-                                alt={movie.title}
-                                className="w-full rounded-2xl shadow-2xl"
-                            />
+                            {movie.poster_path ? (
+                                <img
+                                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                                    alt={movie.title}
+                                    className="w-full rounded-2xl shadow-2xl"
+                                />
+                            ) : (
+                                <div className="flex aspect-[2/3] w-full items-center justify-center rounded-2xl bg-secondary text-muted-foreground shadow-2xl">
+                                    <span>Sem Imagem</span>
+                                </div>
+                            )}
                         </div>
 
                         <div className="space-y-6">

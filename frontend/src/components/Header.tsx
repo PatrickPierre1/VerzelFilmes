@@ -4,14 +4,16 @@ import verzelLogo from "@/assets/verzel-logo.jpeg";
 import { Input } from "./ui/input";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
+import GenreFilter from "./GenreFilter";
 
 interface HeaderProps {
     searchQuery: string;
     onSearchChange: (query: string) => void;
     favoritesCount: number;
     onSearch?: (query: string) => void;
+    selectedGenre?: string;
 }
-const Header = ({ searchQuery, onSearchChange, favoritesCount, onSearch }: HeaderProps) => {
+const Header = ({ searchQuery, onSearchChange, favoritesCount, onSearch, selectedGenre }: HeaderProps) => {
     const handleSearch = () => {
         if (onSearch) {
             onSearch(searchQuery);
@@ -49,7 +51,7 @@ const Header = ({ searchQuery, onSearchChange, favoritesCount, onSearch }: Heade
                         </Button>
                     )}
                 </div>
-
+                <GenreFilter selectedGenre={selectedGenre} />
                 <Link
                     to="/favorites"
                     className="flex items-center gap-2 rounded-lg bg-secondary px-4 py-2 transition-all hover:bg-secondary/80 hover:scale-105"
