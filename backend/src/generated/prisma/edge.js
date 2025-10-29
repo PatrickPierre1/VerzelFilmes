@@ -139,7 +139,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\patri\\Documents\\VerzelFilmes\\backend\\src\\generated\\prisma",
+      "value": "/home/patrick/verzelchallenge/backend/src/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -148,12 +148,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "debian-openssl-3.0.x",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\patri\\Documents\\VerzelFilmes\\backend\\prisma\\schema.prisma",
+    "sourceFilePath": "/home/patrick/verzelchallenge/backend/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

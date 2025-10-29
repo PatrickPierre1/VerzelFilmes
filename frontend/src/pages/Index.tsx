@@ -137,7 +137,7 @@ const Index = () => {
                                 key={movie.id}
                                 movie={movie}
                                 isFavorite={favoriteTmdbIds.has(movie.id)}
-                                onToggleFavorite={handleToggleFavorite}
+                                onToggleFavorite={() => handleToggleFavorite(movie)}
                             />
                         ))}
                     </div>

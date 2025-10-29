@@ -4,6 +4,7 @@ import { useFavorites } from "../hooks/useFavorites";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { getMovieById } from "../services/movieService";
 import type { MovieDetailsType } from "../types/movies";
 import Header from "../components/Header";
@@ -13,6 +14,7 @@ const MovieDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { favoriteTmdbIds, addFavorite, removeFavorite } = useFavorites();
+    const [searchQuery, setSearchQuery] = useState("");
 
     const { data: movie, isLoading, isError, error } = useQuery<MovieDetailsType, Error>({
         queryKey: ['movie', id],
@@ -49,12 +51,19 @@ const MovieDetails = () => {
         }
     };
 
+    const handleSearch = (query: string) => {
+        if (query.trim()) {
+            navigate(`/?q=${encodeURIComponent(query)}`);
+        }
+    };
+
     return (
         <div className="min-h-screen">
             <Header
-                searchQuery={""}
-                onSearchChange={() => { }}
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
                 favoritesCount={favoriteTmdbIds.size}
+                onSearch={handleSearch}
             />
             <div className="relative">
                 <div className="absolute inset-0 overflow-hidden">
