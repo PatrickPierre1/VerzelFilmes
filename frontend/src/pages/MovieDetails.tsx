@@ -6,20 +6,46 @@ import { Badge } from "../components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { getMovieById } from "../services/movieService";
-import type { MovieDetailsType } from "../types/movies";
+import type { MovieDetailsType, Movie } from "../types/movies";
 import Header from "../components/Header";
+import AuthModal from "../components/AuthModal";
 
 const MovieDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { favoriteTmdbIds, handleToggleFavorite: toggleFavoriteHook } = useFavorites();
     const [searchQuery, setSearchQuery] = useState("");
+    const [authModalOpen, setAuthModalOpen] = useState(false);
+    const [pendingFavoriteMovie, setPendingFavoriteMovie] = useState<Movie | MovieDetailsType | null>(null);
+
 
     const { data: movie, isLoading, isError, error } = useQuery<MovieDetailsType, Error>({
         queryKey: ['movie', id],
         queryFn: () => getMovieById(Number(id)),
         enabled: !!id,
     });
+
+    const isAuthenticated = () => {
+        return localStorage.getItem("authToken") !== null && localStorage.getItem("user") !== null;
+    };
+
+    const handleToggleFavorite = () => {
+        if (!movie) return;
+
+        if (isAuthenticated()) {
+            toggleFavoriteHook(movie);
+        } else {
+            setPendingFavoriteMovie(movie);
+            setAuthModalOpen(true);
+        }
+    };
+
+    const handleAuthSuccess = () => {
+        if (pendingFavoriteMovie) {
+            toggleFavoriteHook(pendingFavoriteMovie);
+            setPendingFavoriteMovie(null);
+        }
+    };
 
     if (isLoading) {
         return <div className="flex min-h-screen items-center justify-center"><p className="text-lg text-muted-foreground">Carregando detalhes do filme...</p></div>;
@@ -40,9 +66,6 @@ const MovieDetails = () => {
     }
 
     const isFavorite = favoriteTmdbIds.has(movie.id);
-    const handleToggleFavorite = () => {
-        toggleFavoriteHook(movie);
-    };
 
     const handleSearch = (query: string) => {
         if (query.trim()) {
@@ -57,6 +80,12 @@ const MovieDetails = () => {
                 onSearchChange={setSearchQuery}
                 favoritesCount={favoriteTmdbIds.size}
                 onSearch={handleSearch}
+                onLoginClick={() => setAuthModalOpen(true)}
+            />
+            <AuthModal
+                open={authModalOpen}
+                onOpenChange={setAuthModalOpen}
+                onAuthSuccess={handleAuthSuccess}
             />
             <div className="relative">
                 <div className="absolute inset-0 overflow-hidden">
@@ -142,7 +171,7 @@ const MovieDetails = () => {
 
                             <div>
                                 <h2 className="mb-3 text-2xl font-semibold">Sinopse</h2>
-                                <p className="text-lg leading-relaxed text-muted-foreground">
+                                <p className="text-lg leading-relaxed text-muted-foreground text-justify">
                                     {movie.overview}
                                 </p>
                             </div>

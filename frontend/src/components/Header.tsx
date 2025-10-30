@@ -1,23 +1,63 @@
-import { Search, Heart, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Search, Heart, ArrowRight, LogIn, LogOut, User as UserIcon } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import verzelLogo from "@/assets/verzel-logo.jpeg";
 import { Input } from "./ui/input";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import GenreFilter from "./GenreFilter";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
+type User = { id: number; name: string; email: string };
 interface HeaderProps {
     searchQuery: string;
     onSearchChange: (query: string) => void;
     favoritesCount: number;
     onSearch?: (query: string) => void;
     selectedGenre?: string;
+    onLoginClick?: () => void;
 }
-const Header = ({ searchQuery, onSearchChange, favoritesCount, onSearch, selectedGenre }: HeaderProps) => {
+const Header = ({ searchQuery, onSearchChange, favoritesCount, onSearch, selectedGenre, onLoginClick }: HeaderProps) => {
+    const [user, setUser] = useState<User | null>(null);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const checkUser = () => {
+            const storedUser = localStorage.getItem("user");
+            if (storedUser) {
+                setUser(JSON.parse(storedUser));
+            } else {
+                setUser(null);
+            }
+        };
+
+        checkUser();
+
+        window.addEventListener("authChange", checkUser);
+
+        return () => {
+            window.removeEventListener("authChange", checkUser);
+        };
+    }, []);
+
     const handleSearch = () => {
         if (onSearch) {
             onSearch(searchQuery);
         }
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("user");
+        window.dispatchEvent(new Event("authChange"));
+        navigate("/");
     };
 
     return (
@@ -52,16 +92,41 @@ const Header = ({ searchQuery, onSearchChange, favoritesCount, onSearch, selecte
                     )}
                 </div>
                 <GenreFilter selectedGenre={selectedGenre} />
-                <Link
-                    to="/favorites"
-                    className="flex items-center gap-2 rounded-lg bg-secondary px-4 py-2 transition-all hover:bg-secondary/80 hover:scale-105"
-                >
-                    <Heart className="h-5 w-5 text-primary fill-primary" />
-                    <span className="font-medium">Favoritos</span>
-                    <Badge variant="secondary" className="bg-primary text-primary-foreground hover:bg-primary/80" >
-                        {favoritesCount}
-                    </Badge>
-                </Link>
+                <div className="flex items-center gap-4">
+                    <Link
+                        to="/favorites"
+                        className="flex items-center gap-2 rounded-lg bg-secondary px-4 py-2 transition-all hover:bg-secondary/80 hover:scale-105"
+                    >
+                        <Heart className="h-5 w-5 text-primary fill-primary" />
+                        <span className="font-medium">Favoritos</span>
+                        <Badge variant="secondary" className="bg-primary text-primary-foreground hover:bg-primary/80" >
+                            {favoritesCount}
+                        </Badge>
+                    </Link>
+
+                    {user ? (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" size="icon" className="h-10 w-10 rounded-full">
+                                    <UserIcon className="h-5 w-5" />
+                                    <span className="sr-only">Abrir menu do usuário</span>
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>Olá, {user.name.split(' ')[0]}</DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-500 focus:text-red-500 focus:bg-red-500/10">
+                                    <LogOut className="mr-2 h-4 w-4" />
+                                    <span>Sair</span>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    ) : (
+                        <Button onClick={onLoginClick} variant="outline">
+                            <LogIn className="mr-2 h-4 w-4" /> Entrar
+                        </Button>
+                    )}
+                </div>
             </div>
         </header>
     )

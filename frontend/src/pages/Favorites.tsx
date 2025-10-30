@@ -5,8 +5,9 @@ import MovieCard from "../components/MovieCard";
 import { useFavorites } from "../hooks/useFavorites";
 import { Button } from "../components/ui/button";
 import Header from "../components/Header";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import AuthModal from "../components/AuthModal";
 import { getMovieById } from "../services/movieService";
 import { getShareToken } from "../services/userService";
 
@@ -19,6 +20,12 @@ const Favorites = () => {
         handleToggleFavorite,
     } = useFavorites();
     const [inputValue, setInputValue] = useState("");
+    const [authModalOpen, setAuthModalOpen] = useState(false);
+
+    useEffect(() => {
+        const token = localStorage.getItem("authToken");
+        if (!token) navigate("/");
+    }, [navigate]);
 
     const favoriteMovieDetails = useQueries({
         queries: favorites.map((fav) => ({
@@ -59,6 +66,7 @@ const Favorites = () => {
                     onSearchChange={setInputValue}
                     favoritesCount={favoritesCount}
                     onSearch={handleSearch}
+                    onLoginClick={() => setAuthModalOpen(true)}
                 />
                 <div className="flex h-screen flex-col items-center justify-center text-center">
                     <Heart className="mb-4 h-16 w-16 text-muted-foreground" />
@@ -68,6 +76,11 @@ const Favorites = () => {
                     </p>
                     <Button onClick={() => navigate("/")}>Explorar Filmes</Button>
                 </div>
+                <AuthModal
+                    open={authModalOpen}
+                    onOpenChange={setAuthModalOpen}
+                    onAuthSuccess={() => {}}
+                />
             </>
         );
     }
@@ -83,6 +96,12 @@ const Favorites = () => {
                 onSearchChange={setInputValue}
                 favoritesCount={favorites.length}
                 onSearch={handleSearch}
+                onLoginClick={() => setAuthModalOpen(true)}
+            />
+            <AuthModal
+                open={authModalOpen}
+                onOpenChange={setAuthModalOpen}
+                onAuthSuccess={() => {}}
             />
             <div className="container px-4 py-8">
 

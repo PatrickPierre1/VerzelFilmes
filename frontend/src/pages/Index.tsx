@@ -84,6 +84,7 @@ const Index = () => {
                 onSearchChange={setInputValue}
                 favoritesCount={favoriteTmdbIds.size}
                 selectedGenre={selectedGenre}
+                onLoginClick={() => setAuthModalOpen(true)}
             />
             <AuthModal
                 open={authModalOpen}
