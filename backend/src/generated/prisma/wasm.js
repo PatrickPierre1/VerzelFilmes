@@ -146,7 +146,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/patrick/verzelchallenge/backend/src/generated/prisma",
+      "value": "C:\\Users\\patri\\Documents\\VerzelFilmes\\backend\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -155,12 +155,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-3.0.x",
+        "value": "windows",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/patrick/verzelchallenge/backend/prisma/schema.prisma",
+    "sourceFilePath": "C:\\Users\\patri\\Documents\\VerzelFilmes\\backend\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -174,6 +174,7 @@ const config = {
     "db"
   ],
   "activeProvider": "mysql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
