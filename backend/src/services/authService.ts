@@ -33,7 +33,7 @@ const authService = {
         };
 
         const token = jwt.sign(payload, process.env.JWT_SECRET!, {
-            expiresIn: "1h",
+            expiresIn: "1y",
         });
         return token;
     },
@@ -58,7 +58,7 @@ const authService = {
         };
 
         const token = jwt.sign(payload, process.env.JWT_SECRET!, {
-            expiresIn: "1w",
+            expiresIn: "1y",
         });
         return token;
     },
