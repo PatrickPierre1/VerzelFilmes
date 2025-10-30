@@ -12,11 +12,18 @@ const api = axios.create({
 
 const handleError = (error: unknown) => {
     if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError<{ message: string }>;
-        throw new Error(
-            axiosError.response?.data?.message ||
-                "Ocorreu um erro na requisição."
-        );
+        const axiosError = error as AxiosError<{ message: string; errors: { msg: string }[] }>;
+        const responseData = axiosError.response?.data;
+
+        if (responseData && Array.isArray(responseData.errors) && responseData.errors.length > 0) {
+            throw new Error(responseData.errors[0].msg);
+        }
+
+        if (responseData && responseData.message) {
+            throw new Error(responseData.message);
+        }
+
+        throw new Error("Ocorreu um erro na requisição.");
     }
     throw new Error("Ocorreu um erro inesperado.");
 };
