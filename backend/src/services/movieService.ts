@@ -1,15 +1,36 @@
 import tmdbApi from "../lib/tmdbApi";
 import { Movie } from "../types/movieType";
 
-export const getMovies = async (page: number = 1): Promise<Movie[]> => {
+export interface Genre {
+    id: number;
+    name: string;
+}
+
+export const getMovies = async (
+    page: number = 1,
+    genreId?: number
+): Promise<Movie[]> => {
     try {
+        const genreQuery = genreId ? `&with_genres=${genreId}` : "";
         const response = await tmdbApi.get(
-            `/movie/popular?language=pt-BR&page=${page}`
+            `/discover/movie?language=pt-BR&&sort_by=vote_count.desc&page=${page}${genreQuery}`
         );
         return response.data.results;
     } catch (error) {
         console.error("Erro ao buscar filmes do TMDB:", error);
         throw new Error("Falha ao buscar filmes do TMDB");
+    }
+};
+
+export const getGenres = async (): Promise<Genre[]> => {
+    try {
+        const response = await tmdbApi.get(
+            "/genre/movie/list?language=pt-BR"
+        );
+        return response.data.genres;
+    } catch (error) {
+        console.error("Erro ao buscar gêneros do TMDB:", error);
+        throw new Error("Falha ao buscar gêneros do TMDB");
     }
 };
 
@@ -31,5 +52,15 @@ export const searchMoviesByName = async (
     } catch (error) {
         console.error("Erro ao buscar filmes por nome no TMDB:", error);
         throw new Error("Falha ao buscar filmes por nome no TMDB");
+    }
+};
+
+export const getMoviesById = async (id: number): Promise<Movie> => {
+    try {
+        const response = await tmdbApi.get(`/movie/${id}?language=pt-BR`);
+        return response.data;
+    } catch (error) {
+        console.error("Erro ao buscar filmes do TMDB:", error);
+        throw new Error("Falha ao buscar filmes do TMDB");
     }
 };
