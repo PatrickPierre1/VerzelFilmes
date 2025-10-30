@@ -13,7 +13,7 @@ import { toast } from "sonner";
 const MovieDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { favoriteTmdbIds, addFavorite, removeFavorite } = useFavorites();
+    const { favoriteTmdbIds, handleToggleFavorite: toggleFavoriteHook } = useFavorites();
     const [searchQuery, setSearchQuery] = useState("");
 
     const { data: movie, isLoading, isError, error } = useQuery<MovieDetailsType, Error>({
@@ -42,13 +42,7 @@ const MovieDetails = () => {
 
     const isFavorite = favoriteTmdbIds.has(movie.id);
     const handleToggleFavorite = () => {
-        if (isFavorite) {
-            removeFavorite(movie.id);
-            toast.success("Filme removido dos favoritos!");
-        } else {
-            addFavorite({ tmdbId: movie.id, titulo: movie.title });
-            toast.success("Filme adicionado aos favoritos!");
-        }
+        toggleFavoriteHook(movie);
     };
 
     const handleSearch = (query: string) => {

@@ -3,6 +3,7 @@ import {
     favoriteService,
     type FavoriteMovie,
 } from "../services/favoriteService";
+import { toast } from "sonner";
 
 export const useFavorites = () => {
     const [favorites, setFavorites] = useState<FavoriteMovie[]>([]);
@@ -68,11 +69,23 @@ export const useFavorites = () => {
         [favorites]
     );
 
+    const handleToggleFavorite = useCallback(
+        (movie: { id: number; title: string }) => {
+            if (favoriteTmdbIds.has(movie.id)) {
+                removeFavorite(movie.id);
+                toast.success("Filme removido dos favoritos!");
+            } else {
+                addFavorite({ tmdbId: movie.id, titulo: movie.title });
+                toast.success("Filme adicionado aos favoritos!");
+            }
+        },
+        [addFavorite, removeFavorite, favoriteTmdbIds]
+    );
+
     return {
         favorites,
         favoriteTmdbIds,
-        addFavorite,
-        removeFavorite,
+        handleToggleFavorite,
         isLoading,
     };
 };

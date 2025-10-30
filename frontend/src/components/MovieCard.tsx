@@ -7,7 +7,7 @@ import { Badge } from "./ui/badge";
 interface MovieCardProps {
     movie: Movie;
     isFavorite: boolean;
-    onToggleFavorite: (movieId: number) => void;
+    onToggleFavorite: (movie: Movie) => void;
 }
 const MovieCard = ({ movie, isFavorite, onToggleFavorite }: MovieCardProps) => {
     return (
@@ -40,7 +40,7 @@ const MovieCard = ({ movie, isFavorite, onToggleFavorite }: MovieCardProps) => {
                         variant="ghost"
                         onClick={(e) => {
                             e.preventDefault();
-                            onToggleFavorite(movie.id);
+                            onToggleFavorite(movie);
                         }}
                         className="shrink-0 transition-all hover:scale-110"
                     >

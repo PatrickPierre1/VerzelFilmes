@@ -1,7 +1,12 @@
 import axios from "axios";
+import api from "../lib/api";
 
 const API_URL = "http://localhost:3001/api/favorites";
 
+interface SharedFavoritesResponse {
+    userName: string | null;
+    favorites: FavoriteMovie[];
+}
 export interface FavoriteMovie {
     id: number;
     tmdbId: number;
@@ -40,5 +45,14 @@ export const favoriteService = {
         await axios.delete(`${API_URL}/${favoriteMovieId}`, {
             headers: getAuthHeaders(),
         });
+    },
+
+    async getSharedFavorites(
+        shareToken: string
+    ): Promise<SharedFavoritesResponse> {
+        const response = await api.get<SharedFavoritesResponse>(
+            `/favorites/share/${shareToken}`
+        );
+        return response.data;
     },
 };

@@ -6,7 +6,6 @@ import { getMovies, searchMovies } from "../services/movieService";
 import { useFavorites } from "../hooks/useFavorites";
 import { useSearchParams } from "react-router-dom";
 import AuthModal from "../components/AuthModal";
-import { toast } from "sonner";
 import {
     Pagination,
     PaginationContent,
@@ -24,7 +23,7 @@ const Index = () => {
     const [authModalOpen, setAuthModalOpen] = useState(false);
     const [inputValue, setInputValue] = useState(initialQuery);
     const [searchQuery, setSearchQuery] = useState(initialQuery);
-    const { favoriteTmdbIds, addFavorite, removeFavorite } = useFavorites();
+    const { favoriteTmdbIds, handleToggleFavorite: toggleFavoriteHook } = useFavorites();
     const [selectedGenre, setSelectedGenre] = useState(initialGenre);
     const [page, setPage] = useState(1);
 
@@ -36,14 +35,7 @@ const Index = () => {
 
     const handleToggleFavorite = (movie: Movie) => {
         if (isAuthenticated()) {
-            const isCurrentlyFavorite = favoriteTmdbIds.has(movie.id);
-            if (isCurrentlyFavorite) {
-                removeFavorite(movie.id);
-                toast.success("Filme removido dos favoritos!");
-            } else {
-                addFavorite({ tmdbId: movie.id, titulo: movie.title });
-                toast.success("Filme adicionado aos favoritos!");
-            }
+            toggleFavoriteHook(movie);
         } else {
             setPendingFavoriteMovie(movie);
             setAuthModalOpen(true);
@@ -51,9 +43,8 @@ const Index = () => {
     };
 
     const handleAuthSuccess = () => {
-        if (pendingFavoriteMovie !== null) {
-            addFavorite({ tmdbId: pendingFavoriteMovie.id, titulo: pendingFavoriteMovie.title });
-            toast.success("Filme adicionado aos favoritos!");
+        if (pendingFavoriteMovie) {
+            toggleFavoriteHook(pendingFavoriteMovie);
             setPendingFavoriteMovie(null);
         }
     };
@@ -137,7 +128,7 @@ const Index = () => {
                                 key={movie.id}
                                 movie={movie}
                                 isFavorite={favoriteTmdbIds.has(movie.id)}
-                                onToggleFavorite={() => handleToggleFavorite(movie)}
+                                onToggleFavorite={handleToggleFavorite}
                             />
                         ))}
                     </div>

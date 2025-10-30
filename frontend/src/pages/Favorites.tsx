@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Heart, Loader2 } from "lucide-react";
+import { Heart, Loader2, Share2 } from "lucide-react";
 import { useQueries } from "@tanstack/react-query";
 import MovieCard from "../components/MovieCard";
 import { useFavorites } from "../hooks/useFavorites";
@@ -8,14 +8,15 @@ import Header from "../components/Header";
 import { useState } from "react";
 import { toast } from "sonner";
 import { getMovieById } from "../services/movieService";
+import { getShareToken } from "../services/userService";
 
 const Favorites = () => {
     const navigate = useNavigate();
     const {
         favorites,
-        removeFavorite,
         isLoading: isLoadingFavorites,
         favoriteTmdbIds,
+        handleToggleFavorite,
     } = useFavorites();
     const [inputValue, setInputValue] = useState("");
 
@@ -30,6 +31,21 @@ const Favorites = () => {
     const handleSearch = (query: string) => {
         if (query.trim()) {
             navigate(`/?q=${encodeURIComponent(query)}`);
+        }
+    };
+
+    const handleShare = async () => {
+        try {
+            const token = await getShareToken();
+            const shareLink = `${window.location.origin}/share/${token}`;
+            await navigator.clipboard.writeText(shareLink);
+            toast.success("Link de compartilhamento copiado para a área de transferência!");
+        } catch (error) {
+            if (error instanceof Error) {
+                toast.error(`Erro ao compartilhar: ${error.message}`);
+            } else {
+                toast.error("Ocorreu um erro desconhecido ao compartilhar.");
+            }
         }
     };
 
@@ -70,9 +86,14 @@ const Favorites = () => {
             />
             <div className="container px-4 py-8">
 
-                <div className="mb-8 flex items-center gap-3">
-                    <Heart className="h-8 w-8 fill-primary text-primary" />
-                    <h1 className="text-4xl font-bold">Meus Favoritos</h1>
+                <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                        <Heart className="h-8 w-8 fill-primary text-primary" />
+                        <h1 className="text-4xl font-bold">Meus Favoritos</h1>
+                    </div>
+                    <Button onClick={handleShare} variant="outline">
+                        <Share2 className="mr-2 h-4 w-4" /> Compartilhar Lista
+                    </Button>
                 </div>
 
                 {isLoading ? (
@@ -89,10 +110,7 @@ const Favorites = () => {
                                 key={movie.id}
                                 movie={movie}
                                 isFavorite={favoriteTmdbIds.has(movie.id)}
-                                onToggleFavorite={() => {
-                                    removeFavorite(movie.id);
-                                    toast.success("Filme removido dos favoritos!");
-                                }}
+                                onToggleFavorite={handleToggleFavorite}
                             />
                         ))}
                     </div>
