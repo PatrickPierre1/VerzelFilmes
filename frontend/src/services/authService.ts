@@ -7,7 +7,7 @@ interface AuthCredentials {
 }
 
 const api = axios.create({
-    baseURL: "http://localhost:3001/api/auth",
+    baseURL: import.meta.env.VITE_API_URL + "/auth" || "http://localhost:3001/api/auth",
 });
 
 const handleError = (error: unknown) => {

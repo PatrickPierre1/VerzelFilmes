@@ -1,7 +1,7 @@
 import axios from "axios";
 import api from "../lib/api";
 
-const API_URL = "http://localhost:3001/api/favorites";
+const API_URL = import.meta.env.VITE_API_URL + "/favorites" || "http://localhost:3001/api/favorites";
 
 interface SharedFavoritesResponse {
     userName: string | null;
