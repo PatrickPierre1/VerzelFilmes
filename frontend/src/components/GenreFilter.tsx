@@ -31,7 +31,7 @@ const GenreFilter = ({ selectedGenre }: GenreFilterProps) => {
 
     return (
         <Select value={selectedGenre} onValueChange={handleGenreChange} disabled={isLoading}>
-            <SelectTrigger className="w-[180px] bg-secondary border-border focus:ring-primary">
+            <SelectTrigger className="w-full md:w-[180px] bg-secondary border-border focus:ring-primary">
                 <SelectValue placeholder="Filtrar por gênero" />
             </SelectTrigger>
             <SelectContent>

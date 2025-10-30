@@ -1,16 +1,23 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useQuery, useQueries } from "@tanstack/react-query";
 import { Heart, Loader2 } from "lucide-react";
+import { useState } from "react";
 
 import Header from "../components/Header";
 import MovieCard from "../components/MovieCard";
 import { getMovieById } from "../services/movieService";
 import { useFavorites } from "../hooks/useFavorites";
 import { favoriteService } from "../services/favoriteService";
+import AuthModal from "../components/AuthModal";
+import type { Movie } from "@/types/movies";
 
 const SharedFavorites = () => {
+    const navigate = useNavigate();
+    const [authModalOpen, setAuthModalOpen] = useState(false);
     const { shareToken } = useParams<{ shareToken: string }>();
-    const { favoriteTmdbIds, handleToggleFavorite } = useFavorites();
+    const { favoriteTmdbIds, handleToggleFavorite: toggleFavoriteHook } = useFavorites();
+    const [pendingFavoriteMovie, setPendingFavoriteMovie] = useState<Movie | null>(null);
+    const [searchQuery, setSearchQuery] = useState("");
 
     const { data: sharedData, isLoading: isLoadingSharedList, isError, error } = useQuery({
         queryKey: ["sharedFavorites", shareToken],
@@ -30,6 +37,32 @@ const SharedFavorites = () => {
     const isLoading = isLoadingSharedList || isLoadingMovieDetails;
     const movies = favoriteMovieDetails.map((q) => q.data).filter(Boolean);
 
+    const isAuthenticated = () => {
+        return localStorage.getItem("authToken") !== null && localStorage.getItem("user") !== null;
+    };
+
+    const handleToggleFavorite = (movie: Movie) => {
+        if (isAuthenticated()) {
+            toggleFavoriteHook(movie);
+        } else {
+            setPendingFavoriteMovie(movie);
+            setAuthModalOpen(true);
+        }
+    };
+
+    const handleAuthSuccess = () => {
+        if (pendingFavoriteMovie) {
+            toggleFavoriteHook(pendingFavoriteMovie);
+            setPendingFavoriteMovie(null);
+        }
+    };
+
+    const handleSearch = (query: string) => {
+        if (query.trim()) {
+            navigate(`/?q=${encodeURIComponent(query)}`);
+        }
+    };
+
     if (isError) {
         return (
             <div className="flex h-screen flex-col items-center justify-center text-center">
@@ -45,7 +78,18 @@ const SharedFavorites = () => {
 
     return (
         <div className="min-h-screen">
-            <Header searchQuery="" onSearchChange={() => { }} favoritesCount={favoriteTmdbIds.size} onSearch={() => { }} />
+            <Header
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
+                favoritesCount={favoriteTmdbIds.size}
+                onSearch={handleSearch}
+                onLoginClick={() => setAuthModalOpen(true)}
+            />
+            <AuthModal
+                open={authModalOpen}
+                onOpenChange={setAuthModalOpen}
+                onAuthSuccess={handleAuthSuccess}
+            />
             <div className="container px-4 py-8">
                 <div className="mb-8 flex items-center gap-3">
                     <Heart className="h-8 w-8 fill-primary text-primary" />
@@ -68,7 +112,7 @@ const SharedFavorites = () => {
                                 key={movie.id}
                                 movie={movie}
                                 isFavorite={favoriteTmdbIds.has(movie.id)}
-                                onToggleFavorite={() => handleToggleFavorite(movie)}
+                                onToggleFavorite={handleToggleFavorite}
                             />
                         ))}
                     </div>

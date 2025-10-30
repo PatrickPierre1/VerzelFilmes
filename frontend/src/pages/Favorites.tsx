@@ -5,10 +5,12 @@ import MovieCard from "../components/MovieCard";
 import { useFavorites } from "../hooks/useFavorites";
 import { Button } from "../components/ui/button";
 import Header from "../components/Header";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import AuthModal from "../components/AuthModal";
 import { getMovieById } from "../services/movieService";
 import { getShareToken } from "../services/userService";
+import ShareModal from "../components/ShareModal";
 
 const Favorites = () => {
     const navigate = useNavigate();
@@ -19,6 +21,14 @@ const Favorites = () => {
         handleToggleFavorite,
     } = useFavorites();
     const [inputValue, setInputValue] = useState("");
+    const [authModalOpen, setAuthModalOpen] = useState(false);
+    const [shareModalOpen, setShareModalOpen] = useState(false);
+    const [shareLink, setShareLink] = useState("");
+
+    useEffect(() => {
+        const token = localStorage.getItem("authToken");
+        if (!token) navigate("/");
+    }, [navigate]);
 
     const favoriteMovieDetails = useQueries({
         queries: favorites.map((fav) => ({
@@ -37,8 +47,10 @@ const Favorites = () => {
     const handleShare = async () => {
         try {
             const token = await getShareToken();
-            const shareLink = `${window.location.origin}/share/${token}`;
-            await navigator.clipboard.writeText(shareLink);
+            const link = `${window.location.origin}/share/${token}`;
+            setShareLink(link);
+            setShareModalOpen(true);
+            await navigator.clipboard.writeText(link);
             toast.success("Link de compartilhamento copiado para a área de transferência!");
         } catch (error) {
             if (error instanceof Error) {
@@ -59,6 +71,7 @@ const Favorites = () => {
                     onSearchChange={setInputValue}
                     favoritesCount={favoritesCount}
                     onSearch={handleSearch}
+                    onLoginClick={() => setAuthModalOpen(true)}
                 />
                 <div className="flex h-screen flex-col items-center justify-center text-center">
                     <Heart className="mb-4 h-16 w-16 text-muted-foreground" />
@@ -68,6 +81,11 @@ const Favorites = () => {
                     </p>
                     <Button onClick={() => navigate("/")}>Explorar Filmes</Button>
                 </div>
+                <AuthModal
+                    open={authModalOpen}
+                    onOpenChange={setAuthModalOpen}
+                    onAuthSuccess={() => { }}
+                />
             </>
         );
     }
@@ -83,15 +101,26 @@ const Favorites = () => {
                 onSearchChange={setInputValue}
                 favoritesCount={favorites.length}
                 onSearch={handleSearch}
+                onLoginClick={() => setAuthModalOpen(true)}
+            />
+            <AuthModal
+                open={authModalOpen}
+                onOpenChange={setAuthModalOpen}
+                onAuthSuccess={() => { }}
+            />
+            <ShareModal
+                open={shareModalOpen}
+                onOpenChange={setShareModalOpen}
+                shareLink={shareLink}
             />
             <div className="container px-4 py-8">
 
                 <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
                         <Heart className="h-8 w-8 fill-primary text-primary" />
-                        <h1 className="text-4xl font-bold">Meus Favoritos</h1>
+                        <h1 className="text-2xl md:text-4xl font-bold">Meus Favoritos</h1>
                     </div>
-                    <Button onClick={handleShare} variant="outline">
+                    <Button onClick={handleShare} variant="outline" className="w-full md:w-auto">
                         <Share2 className="mr-2 h-4 w-4" /> Compartilhar Lista
                     </Button>
                 </div>
