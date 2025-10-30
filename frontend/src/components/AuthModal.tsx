@@ -74,7 +74,7 @@ const AuthModal = ({ open, onOpenChange, onAuthSuccess }: AuthModalProps) => {
                 </DialogHeader>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    {error && <p className="text-red-500 text-sm">{error}</p>} {/* Exibe a mensagem de erro */}
+                    {error && <p className="text-red-500 text-sm">{error}</p>}
                     {!isLogin && (
                         <div className="space-y-2">
                             <Label htmlFor="name">Nome</Label>
