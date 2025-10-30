@@ -8,7 +8,6 @@ import { useState } from "react";
 import { getMovieById } from "../services/movieService";
 import type { MovieDetailsType } from "../types/movies";
 import Header from "../components/Header";
-import { toast } from "sonner";
 
 const MovieDetails = () => {
     const { id } = useParams();
