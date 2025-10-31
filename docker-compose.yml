@@ -1,23 +1,49 @@
 services:
   db:
-    image: mysql:latest
-    container_name: verzelchallenge_mysql
+    image: postgres:latest
+    container_name: verzelchallenge_db
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: verzel_db
-      MYSQL_USER: Patrick
-      MYSQL_PASSWORD: Patrick@1
+      POSTGRES_DB: verzel_db
+      POSTGRES_USER: Patrick
+      POSTGRES_PASSWORD: Patrick@1
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - mysql_data:/var/lib/mysql
-    networks:
-      - verzel_network
+      - postgres_data:/var/lib/postgresql
+    restart: unless-stopped
+
+  backend:
+    container_name: verzelchallenge_backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - DATABASE_URL=postgresql://Patrick:Patrick@1@db:5432/verzel_db
+      - TMDB_API_URL=https://api.themoviedb.org/3
+      - TMDB_BEARER_TOKEN=eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5OWJiNWFmNzdkZGQ1OGYyYjc4ZTg1Y2RkYmFiYTA0NSIsIm5iZiI6MTc0ODMwMTIzOC42Mywic3ViIjoiNjgzNGY1YjZhOWVhMjBhZWRmMDM3NzJiIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.eiBGBh-0--RLHVgZYsTPxGSTKfPpZ64Xiyy1FZGQz5A
+      - JWT_SECRET="8cbc60a1e52c5c9c2e03e2692392dcd0bbca01d73dfa8fb28bfe33b65e47ef3a"
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  frontend:
+    container_name: verzelchallenge_frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:3000/api  
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
     restart: unless-stopped
 
 volumes:
-  mysql_data:
-
-networks:
-  verzel_network:
-    driver: bridge
+  postgres_data:

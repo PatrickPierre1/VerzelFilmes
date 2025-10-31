@@ -11,7 +11,7 @@ import favoritesRoutes from "./routes/favoritesRoutes";
 import userRoutes from "./routes/userRoutes";
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 

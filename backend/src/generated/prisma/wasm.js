@@ -114,20 +114,14 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
-exports.Prisma.FavoriteMovieOrderByRelevanceFieldEnum = {
-  titulo: 'titulo'
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
 };
 
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
-};
-
-exports.Prisma.UserOrderByRelevanceFieldEnum = {
-  name: 'name',
-  email: 'email',
-  password: 'password',
-  shareToken: 'shareToken'
 };
 
 
@@ -146,7 +140,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\patri\\Documents\\VerzelFilmes\\backend\\src\\generated\\prisma",
+      "value": "/usr/src/app/src/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -155,12 +149,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "linux-musl-openssl-3.0.x",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\patri\\Documents\\VerzelFilmes\\backend\\prisma\\schema.prisma",
+    "sourceFilePath": "/usr/src/app/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -173,8 +167,7 @@ const config = {
   "datasourceNames": [
     "db"
   ],
-  "activeProvider": "mysql",
-  "postinstall": false,
+  "activeProvider": "postgresql",
   "inlineDatasources": {
     "db": {
       "url": {
@@ -183,8 +176,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel FavoriteMovie {\n  id        Int      @id @default(autoincrement())\n  tmdbId    Int      @map(\"tmdb_id\")\n  titulo    String   @db.VarChar(255)\n  createdAt DateTime @default(now())\n  userId    Int      @map(\"user_id\")\n  user      User     @relation(fields: [userId], references: [id])\n\n  @@unique([userId, tmdbId])\n  @@map(\"favorite_movies\")\n}\n\nmodel User {\n  id             Int             @id @default(autoincrement())\n  name           String\n  email          String          @unique\n  password       String\n  shareToken     String?         @unique @default(uuid())\n  createdAt      DateTime        @default(now()) @map(\"created_at\")\n  favoriteMovies FavoriteMovie[]\n\n  @@map(\"users\")\n}\n",
-  "inlineSchemaHash": "e929ffbae224a3992aaad9bf330d37a48a238fcd690399a985b1b970d78aca00",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel FavoriteMovie {\n  id        Int      @id @default(autoincrement())\n  tmdbId    Int      @map(\"tmdb_id\")\n  titulo    String   @db.VarChar(255)\n  createdAt DateTime @default(now())\n  userId    Int      @map(\"user_id\")\n  user      User     @relation(fields: [userId], references: [id])\n\n  @@unique([userId, tmdbId])\n  @@map(\"favorite_movies\")\n}\n\nmodel User {\n  id             Int             @id @default(autoincrement())\n  name           String\n  email          String          @unique\n  password       String\n  shareToken     String?         @unique @default(uuid())\n  createdAt      DateTime        @default(now()) @map(\"created_at\")\n  favoriteMovies FavoriteMovie[]\n\n  @@map(\"users\")\n}\n",
+  "inlineSchemaHash": "2b0c9b3756923905444b4043a3453fc31e16bc4a666e663f5d94ae404f999147",
   "copyEngine": true
 }
 config.dirname = '/'
